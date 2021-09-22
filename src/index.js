@@ -120,7 +120,7 @@ window.onload = () => {
             userDetails.innerHTML = '';
 
             // Unsubscribe from Firestore Realtime Stream
-            unsubscribe();
+            unsubscribe && unsubscribe();
         }
     });
 
