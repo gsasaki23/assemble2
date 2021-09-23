@@ -10,13 +10,6 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 
-# Firebase config
-
-# Uncomment this if you'd like others to create their own Firebase project.
-# For a team working on the same Firebase project(s), it is recommended to leave
-# it commented so all members can deploy to the same project(s) in .firebaserc.
-# .firebaserc
-
 # Runtime data
 pids
 *.pid
@@ -46,6 +39,8 @@ build/Release
 
 # Dependency directories
 node_modules/
+/.pnp
+.pnp.js
 
 # Optional npm cache directory
 .npm
@@ -64,3 +59,20 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

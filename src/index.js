@@ -1,10 +1,27 @@
-// Import the functions you need from the SDKs you need
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+// Firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, collection, getDocs, query, where, doc, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
-
+import { getFirestore, collection, getDocs, query, where, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -23,7 +40,6 @@ const provider = new GoogleAuthProvider();
 const db = getFirestore();
 
 // Firestore
-let thingsRef;
 let unsubscribe;
 
 /// Sign in event handlers
@@ -45,11 +61,18 @@ window.onload = () => {
             const token = credential.accessToken;
             // The signed-in user info.
             const user = result.user;
+            console.log("credential: " + credential);
+            console.log("token: " + token);
+            console.log("user: " + user);
         }).catch(error => {
             const errorCode = error.code;
             const errorMessage = error.message;
             const email = error.email;
             const credential = GoogleAuthProvider.credentialFromError(error);
+            console.log("errorCode: " + errorCode);
+            console.log("errorMessage: " + errorMessage);
+            console.log("email: " + email);
+            console.log("credential: " + credential);
         });
     
     // Sign Out Button Listener
@@ -63,9 +86,6 @@ window.onload = () => {
             whenSignedIn.hidden = false;
             whenSignedOut.hidden = true;
             userDetails.innerHTML = `<h3>Hello ${user.displayName}!</h3> <p>User ID: ${user.uid}</p>`;
-
-            // Database Reference
-            // thingsRef = db.collection('things');
 
             // Create Button Listener
             createThing.onclick = async () => {
