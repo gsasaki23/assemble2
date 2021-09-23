@@ -1,38 +1,267 @@
-.App {
-  text-align: center;
+.container {
+  max-width: 100%;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.w-15p {
+  width: 15%;
+}
+.w-25p {
+  width: 25%;
+}
+.w-50p {
+  width: 50%;
+}
+.w-75p {
+  width: 75%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.d-b {
+  display: block
+}
+.d-ilb {
+  display: inline-block;
+}
+.va-t {
+  vertical-align: top;
+}
+.va-c {
+  vertical-align: center;
+}
+.ta-r {
+  text-align: right;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 40vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.c-g {
+  background-color: gray;
+}
+.c-lg {
+  background-color: lightgreen;
+}
+.c-lr {
+  background-color: lightcoral;
+}
+.c-y {
+  background-color: yellow;
+}
+
+/* Home Sections */
+.codeJump {
+  padding: 5% 5%;
+  width: 95%;
+  background-color: rgb(40, 82, 83);
+  color: white;
+}
+#eventCodeInput {
+  height: 75px;
+  font-size: x-large;
+}
+.submitButton {
+  width: 250px;
+  height: 69px;
+  font-size: x-large;
+  display: block;
+  margin: 2% 0;
+}
+.newJump {
+  padding: 5% 5%;
+  width: 95%;
+  background-color: cadetblue;
+  color: white;
+}
+.newJumpButton {
+  width: 250px;
+  height: 69px;
+  font-size: x-large;
+  display: block;
+  margin: 2% 0;
+}
+
+/* About Page */
+.blockOne {
+  padding: 2% 5%;
+  width: 95%;
+  background-color: rgb(40, 82, 83);
+  color: white;
+}
+.assembleTitle {
+  font-style: italic;
+  text-decoration: underline;
+}
+.aboutA {
+  margin-bottom: 1%;
+  font-style: italic;
+}
+.aboutB {
+  margin: 0 0 1% 3%;
+}
+.aboutC {
+  margin: 0 0 3% 3%;
+}
+.blockTwo {
+  padding: 2% 5%;
+  width: 95%;
+  background-color: cadetblue;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* AssemblyDetail Sections */
+.background {
+  background-color: lightgray;
+}
+.icon {
+  font-size: xx-large;
+  display: inline-block;
+  margin: 1% 0 1% 0;
+}
+.subHeader {
+  padding: 1% 1% 1% 1%;
+  margin: 0 0 1% 0;
+  background-color: black;
+  color: blue;
+}
+.desc {
+  padding: 1% 1% 1% 1%;
+  margin: 0 auto 0 auto;
+  width: 75%;
+  background-color: cadetblue;
+}
+.descChildB  {
+  display: block;
+  margin-left: 13%;
+}
+#link {
+  color:darkblue;
+}
+.descChildI  {
+  display: inline-block;
+  margin-left: 2%;
+}
+.teammates {
+  padding: 1% 1% 1% 1%;
+  width: 50%;
+  margin: 1% auto 1% auto;
+  text-align: center;
+}
+.teammates nav a {
+  background-color: cadetblue;
+  color: black;
+  margin: 0 0 0 2%;
+  width: 30%;
+  font-weight: bolder;
+  font-size: large;
+}
+.navContent {
+  background-color: lightslategrey;
+  display: block;
+  padding: 1% 0 1% 0;
+}
+.noContent {
+  background-color: lightslategrey;
+  min-height: 10vh;
+  display: block;
+}
+.teammatesInput {
+  padding: 1% 1% 1% 1%;
+  width: 85%;
+  margin: 1% auto 1% auto;
+  text-align: center;
+  background-color: rgb(40, 82, 83);
+  color:white;
+}
+.statusInput {
+  color: white;
+  display: inline-block;
+  width: 15%;
+}
+.statusInputDefault {
+  color: red;
+  display: inline-block;
+  width: 15%;
+}
+.editDelete {
+  padding: 1% 1% 1% 1%;
+  width: 35%;
+  margin: 0 auto 0 auto;
+  text-align: center;
+  background-color: rgb(92, 131, 133);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* AssemblyEdit and AssemblyAdd Sections */
+.editHeading {
+  padding: 1% 1% 1% 1%;
+  background-color: black;
+  color: blue;
+}
+.dupeSection {
+  padding: 1% 1% 1% 1%;
+  margin: 0 auto 0 auto;
+  width: 95%;
+  background-color: rgb(163, 182, 182);
+  color: white;
+}
+.editTop {
+  padding: 1% 1% 1% 1%;
+  margin: 0 auto 0 auto;
+  width: 95%;
+  background-color: rgb(40, 82, 83);
+  color: white;
+}
+.editMain {
+  padding: 1% 1% 1% 1%;
+  width: 95%;
+  background-color: cadetblue;
+}
+.editSubSection {
+  padding-left: 1%;
+  margin-bottom: 1%;
+}
+.editSaveButton {
+  width: 250px;
+  height: 69px;
+  margin: 2% 2%;
+  font-size: x-large;
+}
+.dupeOpenHead {
+  display: inline-block;
+  margin-right: 1%;
+}
+.dupeOpenButton {
+  width: 70px;
+  height: 40px;
+  display: inline-block;
+}
+.dupeSubmitButton {
+  width: 70px;
+  height: 40px;
+  display: inline-block;
+}
+
+
+
+
+
+
+
+input, textarea{
+  padding: 5px;
+  margin-bottom: 5px;
+  font-size: large;
+}
+
+.serverValError {
+  color: hotpink;
+  display: inline-block;
+  margin-left: 5%;
+  font-weight: bold;
+}
+.clientValError {
+  color: hotpink;
+  display: inline-block;
+  margin-left: 5%;
+  font-weight: bold;
+}
+
+.production {
+  color: red;
 }

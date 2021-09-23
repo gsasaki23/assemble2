@@ -1,13 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-
-// Firebase
+import { useEffect, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -28,140 +25,94 @@ const db = getFirestore();
 // Firestore
 let unsubscribe;
 
-/// Sign in event handlers
-window.onload = () => {
-  // HTML Components
-  const whenSignedIn = document.getElementById('whenSignedIn');
-  const whenSignedOut = document.getElementById('whenSignedOut');
-  const signInBtn = document.getElementById('signInBtn');
-  const signOutBtn = document.getElementById('signOutBtn');
-  const userDetails = document.getElementById('userDetails');
-  const createThing = document.getElementById('createThing');
-  const thingsList = document.getElementById('thingsList');
-  
+export default () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
+  const [userToken, setUserToken] = useState("");
+  const [userCredential, setUserCredential] = useState({});
+
+  // Check Login
+  useEffect(()=>{
+    
+  },[]);
+
   // Sign In Button Listener
-  signInBtn.onclick = () => signInWithPopup(auth, provider)
+  const onSignInButtonClickedHandler = e => {
+    e.preventDefault();
+    signInWithPopup(auth, provider)
       .then(result => {
-          // Google Access Token to access the Google API
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
-          // The signed-in user info.
-          const user = result.user;
-          console.log("credential: " + credential);
-          console.log("token: " + token);
-          console.log("user: " + user);
-      }).catch(error => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          const email = error.email;
-          const credential = GoogleAuthProvider.credentialFromError(error);
-          console.log("errorCode: " + errorCode);
-          console.log("errorMessage: " + errorMessage);
-          console.log("email: " + email);
-          console.log("credential: " + credential);
-      });
-  
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log("credential: ");
+        console.log(credential);
+        setUserCredential(credential);
+        
+        const token = credential.accessToken;
+        console.log("token: ");
+        console.log(token);
+        setUserToken(token);
+        
+        const user = result.user;
+        console.log("user: ");
+        console.log(user);
+        setUser(user);
+
+        setLoggedIn(true);
+    }).catch(error => {
+        console.log("Login Error: " + error);
+    });
+  }
+
   // Sign Out Button Listener
-  signOutBtn.onclick = () => auth.signOut();
-  
-  // Listener for Sign In/Out Sections
-  auth.onAuthStateChanged(async (user) => {
-      // Signed In
-      if (user) {
-          // HTML Changes
-          whenSignedIn.hidden = false;
-          whenSignedOut.hidden = true;
-          userDetails.innerHTML = `<h3>Hello ${user.displayName}!</h3> <p>User ID: ${user.uid}</p>`;
+  const onSignOutButtonClickedHandler = e => {
+    e.preventDefault();
+    auth.signOut()
+      .then(() => {
+        setLoggedIn(false);
+        setUserCredential({ });
+        setUserToken("");
+        setUser({ });
+      })
+      .catch(error => {
+        console.log("Login Error: " + error);
+      });
+  }
 
-          // Create Button Listener
-          createThing.onclick = async () => {
-              try {
-                  const thingsRef = await addDoc(collection(db, "things"), {
-                      uid: user.uid,
-                      name: "TEST TEST",
-                      // name: faker.commerce.productName(),
-                      createdAt: serverTimestamp()
-                  });
-                  console.log("Document written with ID: ", thingsRef.id);
-              } catch (e) {
-                  console.error("Error adding document: ", e);
-              }
-          }
-
-          // Query to retrieve all documents in "things" collection?
-          const querySnapshot = await getDocs(collection(db, "things"));
-          querySnapshot.forEach((doc) => {
-              console.log(`${doc.id} => ${doc.data()}`);
-          });
-          
-          // Listener for all documents where uid = logged-in user
-          const q = query(collection(db, "things"), where("uid", "==", user.uid));
-          unsubscribe = onSnapshot(q, (querySnapshot) => {
-              // Update HTML
-              const items = [];
-              querySnapshot.forEach((doc) => {
-                  items.push(`<li>${doc.id + " " + doc.data().name}</li>`);
-              });
-              thingsList.innerHTML = items.join('');
-
-              // Tracking Changes between snapshots
-              querySnapshot.docChanges().forEach((change) => {
-                  if (change.type === "added") {
-                      console.log("New thing: ", change.doc.data());
-                  }
-                  if (change.type === "modified") {
-                      console.log("Modified thing: ", change.doc.data());
-                  }
-                  if (change.type === "removed") {
-                      console.log("Removed thing: ", change.doc.data());
-                  }
-              });
-          });
-      } 
-      // Signed Out
-      else {
-          // HTML Changes
-          whenSignedIn.hidden = true;
-          whenSignedOut.hidden = false;
-          userDetails.innerHTML = '';
-
-          // Unsubscribe from Firestore Realtime Stream
-          unsubscribe && unsubscribe();
-      }
-  });
-
-}
-
-
-function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
 
       <h1>My Awesome App 🔥</h1>
 
-      <section id="whenSignedOut">
-        <button id="signInBtn" className="btn btn-primary">Sign in with Google</button>
-      </section>
+      {/* Button for signing In/Out */}
+      <div id="signInOutSection">
+        {
+          loggedIn 
+          ? 
+          <section id="whenSignedIn">
+            <div id="userDetails">
+              <h3>Hello {user.displayName}!</h3>
+              <p>User ID: {user.uid}</p>
+              <p>User Token: {userToken}</p>
+              <p>Signed In Through: {userCredential.signInMethod}</p>
+            </div>
+            <button id="signOutBtn" className="btn btn-primary" onClick={onSignOutButtonClickedHandler}>
+              Sign Out
+            </button>
+          </section>
+          : 
+          <section id="whenSignedOut">
+            <button id="signInBtn" className="btn btn-primary" onClick={onSignInButtonClickedHandler}>
+              Sign in with Google
+            </button>
+          </section>
+        }
+      </div>
 
-      <section id="whenSignedIn" hidden={true}>
-        <div id="userDetails"></div>
-        <button id="signOutBtn" className="btn btn-primary">Sign Out</button>
-      </section>
-
+      {/* Data Section */}
       <section>
         <h2>My Firestore Things</h2>
         <ul id="thingsList"></ul>
@@ -171,4 +122,31 @@ function App() {
   );
 }
 
-export default App;
+// function App() {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <p>
+//           Edit <code>src/App.js</code> and save to reload.
+//         </p>
+//       </header>
+
+//       <h1>My Awesome App 🔥</h1>
+
+//       <section id="whenSignedOut">
+//         <button id="signInBtn" className="btn btn-primary">Sign in with Google</button>
+//       </section>
+
+//       <section id="whenSignedIn" hidden={true}>
+//         <div id="userDetails"></div>
+//         <button id="signOutBtn" className="btn btn-primary">Sign Out</button>
+//       </section>
+
+//       <section>
+//         <h2>My Firestore Things</h2>
+//         <ul id="thingsList"></ul>
+//         <button id="createThing" className="btn btn-success">Create Random Thing</button>
+//       </section>
+//     </div>
+//   );
+// }
