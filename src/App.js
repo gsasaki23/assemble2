@@ -80,73 +80,51 @@ export default () => {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
+        {/* <p>
           Edit <code>src/App.js</code> and save to reload.
-        </p>
+        </p> */}
       </header>
 
       <h1>My Awesome App 🔥</h1>
 
       {/* Button for signing In/Out */}
       <div id="signInOutSection">
-        {
-          loggedIn 
-          ? 
-          <section id="whenSignedIn">
-            <div id="userDetails">
-              <h3>Hello {user.displayName}!</h3>
-              <p>User ID: {user.uid}</p>
-              <p>User Token: {userToken}</p>
-              <p>Signed In Through: {userCredential.signInMethod}</p>
-            </div>
-            <button id="signOutBtn" className="btn btn-primary" onClick={onSignOutButtonClickedHandler}>
-              Sign Out
-            </button>
-          </section>
-          : 
-          <section id="whenSignedOut">
-            <button id="signInBtn" className="btn btn-primary" onClick={onSignInButtonClickedHandler}>
-              Sign in with Google
-            </button>
-          </section>
-        }
+      { loggedIn 
+        ? 
+        <section id="whenSignedIn">
+          <div id="userDetails">
+            <h3>Hello {user.displayName}!</h3>
+            <p>User ID: {user.uid}</p>
+            <p>User Token: {userToken}</p>
+            <p>Signed In Through: {userCredential.signInMethod}</p>
+          </div>
+          <button id="signOutBtn" className="btn btn-primary" onClick={onSignOutButtonClickedHandler}>
+            Sign Out
+          </button>
+        </section>
+        : 
+        <section id="whenSignedOut">
+          <button id="signInBtn" className="btn btn-primary" onClick={onSignInButtonClickedHandler}>
+            Sign in with Google
+          </button>
+        </section>
+      }
       </div>
 
       {/* Data Section */}
-      <section>
-        <h2>My Firestore Things</h2>
-        <ul id="thingsList"></ul>
-        <button id="createThing" className="btn btn-success">Create Random Thing</button>
-      </section>
+      <div id="dataSection">
+      { loggedIn
+        ?
+        <section id="data">
+          <h2>My Firestore Things</h2>
+          <ul id="thingsList"></ul>
+          <button id="createThing" className="btn btn-success">Create Random Thing</button>
+        </section>
+        : 
+        <section id="noData">
+        </section>
+      }
+      </div>
     </div>
   );
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//       </header>
-
-//       <h1>My Awesome App 🔥</h1>
-
-//       <section id="whenSignedOut">
-//         <button id="signInBtn" className="btn btn-primary">Sign in with Google</button>
-//       </section>
-
-//       <section id="whenSignedIn" hidden={true}>
-//         <div id="userDetails"></div>
-//         <button id="signOutBtn" className="btn btn-primary">Sign Out</button>
-//       </section>
-
-//       <section>
-//         <h2>My Firestore Things</h2>
-//         <ul id="thingsList"></ul>
-//         <button id="createThing" className="btn btn-success">Create Random Thing</button>
-//       </section>
-//     </div>
-//   );
-// }
