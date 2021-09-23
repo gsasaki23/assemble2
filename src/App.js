@@ -2,12 +2,9 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, collection, getDocs, query, where, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// import { getFirestore, collection, getDocs, query, where, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // Initialize Firebase
 const app = initializeApp({
   apiKey: "AIzaSyBQLB16rt3W4N3uljV_x2wR1L6GVWX388k",
@@ -20,12 +17,9 @@ const app = initializeApp({
 });
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-const db = getFirestore();
+// const db = getFirestore();
 
-// Firestore
-let unsubscribe;
-
-export default () => {
+const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [userToken, setUserToken] = useState("");
@@ -128,3 +122,5 @@ export default () => {
     </div>
   );
 }
+
+export default App;
