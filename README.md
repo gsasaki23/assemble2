@@ -1,6 +1,6 @@
 # Asssemble2 (Web App)
 [Live Here](https://assemble2-b630f.web.app/)
-Last Updated: v1.0 by Gaku Sasaki, Sep 2021.
+Last Updated: v1.1 by Gaku Sasaki, Sep 2021.
 
 ## Features
 Events are organized into teams, team admins call members to assemble per event
@@ -27,5 +27,5 @@ to run everything inside `dist` on localhost
 to deploy
 
 ## Changelog
-- v1.0
--- React groundwork and Firestore schema done
+- v1.1: UI for Signin/Signup/Home through MUI added.
+- v1.0: Initialized with create-react-app, Firestore schema done.
