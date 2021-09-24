@@ -1,9 +1,10 @@
-import React from "react";
+import { navigate } from '@reach/router';
 
 // Styling
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 
 const NotFound = (props) => {  
     return(
@@ -14,9 +15,7 @@ const NotFound = (props) => {
                 <p className="mb-0">
                     We're sorry, the page at {props.location.href} was not found.
                 </p>
-                <p className="mb-0">
-                    Please return Home from the Navigation at the top!
-                </p>
+                <Button variant="success" onClick={event=>navigate("/")}>Return to Home!</Button>
             </Alert>
         </>
     )

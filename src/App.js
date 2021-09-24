@@ -1,8 +1,9 @@
 // Views and components
 import { Router } from '@reach/router';
-import Default from "./views/Default";
 import NotFound from "./views/NotFound";
-import NavbarComponent from "./components/NavbarComponent";
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Home from './pages/Home';
 
 // Styling
 import './App.css';
@@ -11,17 +12,34 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+// Styling
+// import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+// import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+// const theme = createTheme ({
+//   palette: {
+// 		primary: {
+// 			light: '#33c9dc',
+// 			main: '#FF5722',
+// 			dark: '#d50000',
+// 			contrastText: '#fff'
+// 		}
+//   }
+// })
+      
+// TODO: import createTheme  from '@material-ui/core/styles';
+
+
 const App = () => {
   return (
     <>
-      <NavbarComponent/>
-
       <Container fluid>
         <Row>
           <Col>
             <Router>
 
-              <Default path="/"/>
+              <Home path="/"/>
+              <Login path="/login"/>
+              <Signup path="/signup"/>
               <NotFound default/>
 
             </Router>
