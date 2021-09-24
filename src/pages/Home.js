@@ -54,8 +54,7 @@ const styles = (theme) => ({
 const Home = (props) => {
     const { classes } = props;
     const [render, setRender] = useState(false);
-    const [uiLoading, setUiLoading] = useState(false);
-    const [imageLoading, setimageLoading] = useState(false);
+    const [uiLoading, setUiLoading] = useState(true);
     const [userData, setUserData] = useState({}); // firstName, lastName
 
     const loadAccountPage = e => {
@@ -78,6 +77,7 @@ const Home = (props) => {
         // const authToken = localStorage.getItem('AuthToken');
 		// TODO: Verify Token with firebase
         setUserData({firstName: "Tom", lastName: "Bradley"});
+        setUiLoading(false);
     }, [props]);
 
     return uiLoading === true
