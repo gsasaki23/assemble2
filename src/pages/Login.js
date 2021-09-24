@@ -48,6 +48,17 @@ const Login = (props) => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // Run every time component is rendered
+    useEffect(()=>{
+        console.log("Showing Login Component");
+        // console.log(props);
+        if (localStorage.AssembleAuthToken){
+            console.log("~ User is already signed in. Let them through!")
+            navigate(`/`);
+        } 
+    }, [props]);
+
+    // Update the email/password state when typing
     const changeHandler = e => {
         console.log(e.target.name + " was changed");
         if (e.target.name === "email"){
@@ -58,24 +69,24 @@ const Login = (props) => {
         }
 	};
     
+    // Verify the email/password when SIGN IN button is clicked
     const submitHandler = e => {
         e.preventDefault();
         console.log("SIGN IN was clicked");
 
         setLoading(true);
         const userData = { email, password };
-        // attempt logging in with email/password
+        console.log(`TODO: Attempt sign-in with ${userData}`)
 
         // successful
         // localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-        localStorage.setItem('AuthToken', `TEMP`);
+        localStorage.setItem('AssembleAuthToken', `TEMP`);
         setLoading(false);
         navigate(`/`);
 
         // unsuccessful
         // error handling..
     }
-
 
     return (<>
         <Container component="main" maxWidth="xs">
