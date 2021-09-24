@@ -1,126 +1,42 @@
-import './App.css';
-import { useEffect, useState } from 'react';
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-// import { getFirestore, collection, getDocs, query, where, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
+// Views and components
+import { Router } from '@reach/router';
+import Default from "./views/Default";
+import NotFound from "./views/NotFound";
 
-// Your web app's Firebase configuration
-// Initialize Firebase
-const app = initializeApp({
-  apiKey: "AIzaSyBQLB16rt3W4N3uljV_x2wR1L6GVWX388k",
-  authDomain: "assemble2-b630f.firebaseapp.com",
-  projectId: "assemble2-b630f",
-  storageBucket: "assemble2-b630f.appspot.com",
-  messagingSenderId: "1040474124604",
-  appId: "1:1040474124604:web:b5a23c8e08570692c3ae39",
-  measurementId: "G-0ZSWJE6P62"
-});
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-// const db = getFirestore();
+// Styling
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState({});
-  const [userToken, setUserToken] = useState("");
-  const [userCredential, setUserCredential] = useState({});
-
-  // Check Login
-  useEffect(()=>{
-    
-  },[]);
-
-  // Sign In Button Listener
-  const onSignInButtonClickedHandler = e => {
-    e.preventDefault();
-    signInWithPopup(auth, provider)
-      .then(result => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log("credential: ");
-        console.log(credential);
-        setUserCredential(credential);
-        
-        const token = credential.accessToken;
-        console.log("token: ");
-        console.log(token);
-        setUserToken(token);
-        
-        const user = result.user;
-        console.log("user: ");
-        console.log(user);
-        setUser(user);
-
-        setLoggedIn(true);
-    }).catch(error => {
-        console.log("Login Error: " + error);
-    });
-  }
-
-  // Sign Out Button Listener
-  const onSignOutButtonClickedHandler = e => {
-    e.preventDefault();
-    auth.signOut()
-      .then(() => {
-        setLoggedIn(false);
-        setUserCredential({ });
-        setUserToken("");
-        setUser({ });
-      })
-      .catch(error => {
-        console.log("Login Error: " + error);
-      });
-  }
-
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p> */}
-      </header>
+    <Container className="App">
+      <Navbar bg="dark" variant="dark">
+        <Navbar.Brand>Assemble2 🔥</Navbar.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Link href="/about">About</Nav.Link>
+          <Nav.Link href="/new">New</Nav.Link>
+        </Nav>
+        <p className="text-muted">© 2021 by Gaku Sasaki</p>
+      </Navbar>
 
-      <h1>My Awesome App 🔥</h1>
+      <Row>
+        <Col>
+          <Router>
 
-      {/* Button for signing In/Out */}
-      <div id="signInOutSection">
-      { loggedIn 
-        ? 
-        <section id="whenSignedIn">
-          <div id="userDetails">
-            <h3>Hello {user.displayName}!</h3>
-            <p>User ID: {user.uid}</p>
-            <p>User Token: {userToken}</p>
-            <p>Signed In Through: {userCredential.signInMethod}</p>
-          </div>
-          <button id="signOutBtn" className="btn btn-primary" onClick={onSignOutButtonClickedHandler}>
-            Sign Out
-          </button>
-        </section>
-        : 
-        <section id="whenSignedOut">
-          <button id="signInBtn" className="btn btn-primary" onClick={onSignInButtonClickedHandler}>
-            Sign in with Google
-          </button>
-        </section>
-      }
-      </div>
+            <Default path="/"/>
+            <NotFound default/>
 
-      {/* Data Section */}
-      <div id="dataSection">
-      { loggedIn
-        ?
-        <section id="data">
-          <h2>My Firestore Things</h2>
-          <ul id="thingsList"></ul>
-          <button id="createThing" className="btn btn-success">Create Random Thing</button>
-        </section>
-        : 
-        <section id="noData">
-        </section>
-      }
-      </div>
-    </div>
+          </Router>
+        </Col>
+      </Row>      
+    </Container>
   );
-}
+};
 
 export default App;

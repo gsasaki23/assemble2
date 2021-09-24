@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from '@reach/router';
 
-export default (props) => {  
+const NotFound = (props) => {  
     return(
         <>
             <div>Error: Page at {props.location.href} was not found.</div>
@@ -9,3 +9,5 @@ export default (props) => {
         </>
     )
 }
+
+export default NotFound;
