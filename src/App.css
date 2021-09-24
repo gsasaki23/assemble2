@@ -1,20 +1,8 @@
-.container {
-  max-width: 100%;
-  padding: 0;
-}
-
-.w-15p {
-  width: 15%;
-}
-.w-25p {
-  width: 25%;
-}
-.w-50p {
-  width: 50%;
-}
-.w-75p {
-  width: 75%;
-}
+/* General Use */
+.w-15p { width: 15%; }
+.w-25p { width: 25%; }
+.w-50p { width: 50%; }
+.w-75p { width: 75%; }
 
 .d-b {
   display: block
@@ -43,6 +31,12 @@
 }
 .c-y {
   background-color: yellow;
+}
+
+/* Navbar */
+.navbar-margin {
+  margin-left: 2%;
+  margin-left: 2%;
 }
 
 /* Home Sections */
