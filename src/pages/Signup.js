@@ -1,9 +1,158 @@
-const Signup = () => {
-    return (
-        <>
-            <div>Signup</div>
-        </>
-    );
+// Utility Imports
+import { useEffect, useState } from 'react';
+import { navigate } from '@reach/router';
+
+// @material-ui Imports
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import withStyles from '@material-ui/core/styles/withStyles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+const styles = (theme) => ({
+	paper: {
+		marginTop: theme.spacing(8),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center'
+	},
+	avatar: {
+		margin: theme.spacing(1),
+		backgroundColor: theme.palette.secondary.main
+	},
+	form: {
+		width: '100%', // Fix IE 11 issue.
+		marginTop: theme.spacing(3)
+	},
+	submit: {
+		margin: theme.spacing(3, 0, 2)
+	},
+	progess: {
+		position: 'absolute'
+	}
+});
+
+const Signup = (props) => {
+    const { classes } = props;
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [userName, setuserName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    // Run every time component is rendered
+    useEffect(()=>{
+        console.log("Showing Signup Component");
+        // console.log(props);
+        if (localStorage.AssembleAuthToken){
+            console.log("~ User is already signed in. Let them through!")
+            navigate(`/`);
+        } 
+    }, [props]);
+
+    // Update the respective state when typing
+    const changeHandler = e => {
+        console.log(e.target.name + " was changed");
+        if (e.target.name === "firstName"){
+            setFirstName(e.target.value);
+        } 
+        else if (e.target.name === "lastName") {
+            setLastName(e.target.value);
+        }
+        else if (e.target.name === "username") {
+            setuserName(e.target.value);
+        }
+        else if (e.target.name === "email") {
+            setEmail(e.target.value);
+        }
+        else if (e.target.name === "password") {
+            setPassword(e.target.value);
+        }
+        else if (e.target.name === "confirmPassword") {
+            if (e.target.value !== password) {
+                setErrors({confirmPassword:"Must match password above."})
+            } else {
+                setConfirmPassword(e.target.value);
+            }
+        }
+	};
+    
+    // Verify the form info when SIGN IN button is clicked
+    const submitHandler = e => {
+        e.preventDefault();
+        console.log("SIGN UP was clicked");
+
+        setLoading(true);
+        const newUserData = { firstName, lastName, userName, email, password, confirmPassword };
+        console.log(`TODO: Attempt registration with ${newUserData}`)
+
+        // successful
+        // localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+        localStorage.setItem('AssembleAuthToken', `TEMP`);
+        setLoading(false);
+        navigate(`/`);
+
+        // unsuccessful
+        // error handling..
+    }
+
+    return (<>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign Up
+                </Typography>
+
+                <form className={classes.form} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField id="firstName" variant="outlined" required fullWidth label="First Name" name="firstName" autoComplete="firstName" helperText={errors.firstName} error={errors.firstName ? true : false} onChange={changeHandler}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}> 
+                            <TextField id="lastName" variant="outlined" required fullWidth label="Last Name" name="lastName" autoComplete="lastName" helperText={errors.lastName} error={errors.lastName ? true : false} onChange={changeHandler}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField id="username" variant="outlined" required fullWidth label="Username"  name="username" autoComplete="username" helperText={errors.username} error={errors.username ? true : false} onChange={changeHandler} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField id="email" variant="outlined" required fullWidth label="Email Address" name="email" autoComplete="email" helperText={errors.email} error={errors.email ? true : false} onChange={changeHandler} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField id="password" variant="outlined" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" helperText={errors.password} error={errors.password ? true : false} onChange={changeHandler} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField id="confirmPassword" variant="outlined" required fullWidth name="confirmPassword" label="Confirm Password" type="password" autoComplete="current-password" onChange={changeHandler} />
+                        </Grid>
+                    </Grid>
+                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={submitHandler} disabled={loading || !firstName || !lastName || !userName || !email || !password || !confirmPassword  }>
+                        Sign Up
+                        {loading && <CircularProgress size={30} className={classes.progess} />}
+                    </Button>
+                    <Grid container>
+                        <Grid item>
+                            <Link href="/signin" variant="body2">
+                                {"Already have an account? Sign in!"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+            </form>
+            </div>
+        </Container>
+    </>);
 };
 
-export default Signup;
+export default withStyles(styles)(Signup);

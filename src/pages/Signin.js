@@ -42,15 +42,16 @@ const styles = (theme) => ({
 	}
 });
 
-const Login = (props) => {
+const Signin = (props) => {
     const { classes } = props;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    // const [errors, setErrors] = useState([]);
 
     // Run every time component is rendered
     useEffect(()=>{
-        console.log("Showing Login Component");
+        console.log("Showing Signin Component");
         // console.log(props);
         if (localStorage.AssembleAuthToken){
             console.log("~ User is already signed in. Let them through!")
@@ -97,7 +98,7 @@ const Login = (props) => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Login
+                    Sign In
                 </Typography>
 
                 <form className={classes.form} noValidate>
@@ -120,4 +121,4 @@ const Login = (props) => {
     </>);
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(Signin);

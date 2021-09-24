@@ -1,7 +1,7 @@
 // Views and components
 import { Router } from '@reach/router';
 import NotFound from "./views/NotFound";
-import Login from './pages/Login';
+import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 
@@ -38,7 +38,7 @@ const App = () => {
             <Router>
 
               <Home path="/"/>
-              <Login path="/login"/>
+              <Signin path="/signin"/>
               <Signup path="/signup"/>
               <NotFound default/>
 

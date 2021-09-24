@@ -68,8 +68,8 @@ const Home = (props) => {
         setRender(false);
     }
     const logoutHandler = e => {
-		// localStorage.removeItem('AuthToken');
-		// props.history.push('/login');
+		localStorage.removeItem('AssembleAuthToken');
+        navigate(`/signin`);
     }
 
     useEffect(()=>{
@@ -81,8 +81,8 @@ const Home = (props) => {
 		// TODO: Verify Token with firebase
         console.log(authToken);
         if (!authToken) {
-            console.log("User is logged out. Transferring to /login")
-            navigate(`/login`);
+            console.log("User is logged out. Transferring to /signin")
+            navigate(`/signin`);
         }
 
         setUserData({firstName: "Tom", lastName: "Bradley"});
