@@ -1,6 +1,6 @@
 // Firebase
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -19,7 +19,6 @@ const app = initializeApp({
     measurementId: "G-0ZSWJE6P62"
 });
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
 const db = getFirestore();
 
 // Firestore
