@@ -1,4 +1,6 @@
+// Utility Imports
 import { useEffect, useState } from 'react';
+import { navigate } from '@reach/router';
 
 // Component Imports
 import Account from '../components/Account';
@@ -73,9 +75,16 @@ const Home = (props) => {
     useEffect(()=>{
         console.log("Showing Home Component");
         console.log(props);
-        // authMiddleWare(this.props.history);
-        // const authToken = localStorage.getItem('AuthToken');
+
+        // authMiddleWare(props.history);
+        const authToken = localStorage.getItem('AuthToken');
 		// TODO: Verify Token with firebase
+        console.log(authToken);
+        if (!authToken) {
+            console.log("User is logged out. Transferring to /login")
+            navigate(`/login`);
+        }
+
         setUserData({firstName: "Tom", lastName: "Bradley"});
         setUiLoading(false);
     }, [props]);
