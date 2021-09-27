@@ -1,31 +1,24 @@
 # Asssemble2 (Web App)
 [Live Here](https://assemble2-b630f.web.app/)
-Last Updated: v1.1 by Gaku Sasaki, Sep 2021.
+
+## Latest Update
+v1.1 (09/24/2021)
 
 ## Features
-Events are organized into teams, team admins call members to assemble per event
+Event organization done in teams. Team leaders (aka Admins) call members to assemble!
 
-## Available Scripts
-In the project directory, you can run:
-### `npm start`
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technical Notes
+- `npm start` Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.\
 The page will reload if you make edits. You will also see any lint errors in the console.
 
-## Notes
-### `npm start`
-to run app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. 
-The page will reload if you make edits. You will also see any lint errors in the console.
-
-### `npm run build` 
+- `npm run build` 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-### `firebase serve` 
-to run everything inside `dist` on localhost
-### `firebase deploy` 
-to deploy
+- `firebase deploy` 
+Deploys the app to the live website.
 
 ## Changelog
-- v1.1: UI for Signin/Signup/Home through MUI added.
-- v1.0: Initialized with create-react-app, Firestore schema done.
+- v1.1 (Sep 21): UI for Signin/Signup/Home through MUI added.
+- v1.0 (Sep 21): Initialized with create-react-app, Firestore schema done.
