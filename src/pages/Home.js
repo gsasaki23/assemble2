@@ -22,6 +22,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import NotesIcon from '@material-ui/icons/Notes';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 const drawerWidth = "15%";
 
 const styles = (theme) => ({
@@ -50,7 +54,10 @@ const styles = (theme) => ({
     userName: {
         marginTop: "5%"
     },
-	toolbar: theme.mixins.toolbar
+	toolbar: theme.mixins.toolbar,
+    logoutLabel: {
+        marginLeft: 'auto'
+    }
 });
 
 const Home = (props) => {
@@ -97,13 +104,23 @@ const Home = (props) => {
     </>)
     : (<>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-                <Typography variant="h6" noWrap>
-                    🔥 Assemble2 🔥
-                </Typography>
-            </Toolbar>
-        </AppBar>
+        
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+                    <IconButton size="medium" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
+                        <MenuIcon />
+                    </IconButton>
+
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                        🔥 Assemble2 🔥
+                    </Typography>
+
+                    <Button color="inherit" className={classes.logoutLabel} onClick={logoutHandler}>Logout</Button>
+                    <ExitToAppIcon onClick={logoutHandler}/>
+                </Toolbar>
+            </AppBar>
+        </Box>
 
         {/* TODO: More Fancies https://mui.com/components/drawers/ */}
         <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper }}>
@@ -131,14 +148,6 @@ const Home = (props) => {
                         <AccountBoxIcon />{' '}
                     </ListItemIcon>
                     <ListItemText primary="Account" />
-                </ListItem>
-
-                <ListItem button key="Logout" onClick={logoutHandler}>
-                    <ListItemIcon>
-                        {' '}
-                        <ExitToAppIcon />{' '}
-                    </ListItemIcon>
-                    <ListItemText primary="Logout" />
                 </ListItem>
             </List>
         </Drawer>
