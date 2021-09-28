@@ -3,9 +3,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = (theme) => ({
     todoTop:{
-        marginTop: "10%",
+        margin: "10% 0% 0% 15%",
         backgroundColor: "blue",
-        textAlign: "center"
+        textAlign: "center",
+        border: "2px solid black"
     }
 });
 

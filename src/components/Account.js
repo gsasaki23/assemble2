@@ -3,9 +3,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = (theme) => ({
     accountTop:{
-        marginTop: "10%",
+        margin: "10% 0% 0% 15%",
         backgroundColor: "red",
-        textAlign: "center"
+        textAlign: "center",
+        border: "2px solid black",
     }
 });
 

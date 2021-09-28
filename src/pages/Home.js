@@ -97,7 +97,6 @@ const Home = (props) => {
     </>)
     : (<>
         <CssBaseline />
-        
         <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h6" noWrap>
@@ -145,8 +144,8 @@ const Home = (props) => {
         </Drawer>
 
         <div>{render ? <Account /> : <Todo />}</div>
+        
     </>
-
     );
 };
 
