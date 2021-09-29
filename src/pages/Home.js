@@ -76,6 +76,7 @@ const Home = (props) => {
     }
     const logoutHandler = e => {
 		localStorage.removeItem('AssembleAuthToken');
+		localStorage.removeItem('AssembleAuthUID');
         navigate(`/signin`);
     }
 
@@ -83,16 +84,18 @@ const Home = (props) => {
         console.log("Showing Home Component");
 
         const authToken = localStorage.getItem('AssembleAuthToken');
-		// TODO: Verify Token with firebase
-        if (!authToken) {
-            console.log("User is logged out. Transferring to /signin")
+        const authUID = localStorage.getItem('AssembleAuthUID');
+        if (!authToken || !authUID) {
+            console.log("User is not logged in. Transferring to /signin")
             navigate(`/signin`);
         } else {
-            console.log(`User is logged in with authToken ${authToken}`)
-        }
+            // TODO: Verify Token with firebase
 
-        setUserData({firstName: "Tom", lastName: "Bradley"});
-        setUiLoading(false);
+            console.log(`User is logged in with authToken ${authToken}`)
+            console.log(`User is logged in with authUID ${authUID}`)
+            setUserData({firstName: "Tom", lastName: "Bradley"});
+            setUiLoading(false);
+        }
     }, [props]);
 
     return uiLoading === true

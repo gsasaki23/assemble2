@@ -55,7 +55,7 @@ const Signin = (props) => {
     useEffect(()=>{
         console.log("Showing Signin Component");
         // console.log(props);
-        if (localStorage.AssembleAuthToken){
+        if (localStorage.AssembleAuthToken && localStorage.AssembleAuthUID){
             console.log("       User is already signed in. Let them through!")
             navigate(`/`);
         } 
@@ -83,6 +83,7 @@ const Signin = (props) => {
                 console.log(`TODO: Fetch user from Firestore db`);
 
                 localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                localStorage.setItem('AssembleAuthUID', result.user.uid);
                 setLoading(false);
                 navigate(`/`);
             })
@@ -103,6 +104,7 @@ const Signin = (props) => {
                 console.log(`TODO: Fetch user from Firestore db`);
 
                 localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                localStorage.setItem('AssembleAuthUID', result.user.uid);
                 setLoading(false);
                 navigate(`/`);
             })

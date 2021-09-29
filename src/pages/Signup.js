@@ -53,7 +53,7 @@ const Signup = (props) => {
     useEffect(()=>{
         console.log("Showing Signup Component");
         // console.log(props);
-        if (localStorage.AssembleAuthToken){
+        if (localStorage.AssembleAuthToken && localStorage.AssembleAuthUID){
             console.log("       User is already signed in. Let them through!")
             navigate(`/`);
         } 
@@ -99,6 +99,7 @@ const Signup = (props) => {
                 // const newUserData = { firstName, lastName, userName, email, password, confirmPassword };
 
                 localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                localStorage.setItem('AssembleAuthUID', result.user.uid);
                 setLoading(false);
                 navigate(`/`);
             })
