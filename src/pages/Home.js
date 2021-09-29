@@ -84,7 +84,6 @@ const Home = (props) => {
 
         const authToken = localStorage.getItem('AssembleAuthToken');
 		// TODO: Verify Token with firebase
-        console.log(authToken);
         if (!authToken) {
             console.log("User is logged out. Transferring to /signin")
             navigate(`/signin`);

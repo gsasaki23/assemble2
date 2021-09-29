@@ -1,6 +1,7 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
+import { auth, provider, signInWithEmailAndPassword, signInWithPopup } from '../util/auth';
 
 // @material-ui Imports
 import Avatar from '@material-ui/core/Avatar';
@@ -9,11 +10,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Container from '@material-ui/core/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import LockIcon from '@mui/icons-material/Lock';
+import CircularProgress from '@mui/material/CircularProgress';
+import GoogleIcon from '@mui/icons-material/Google';
 const styles = (theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
@@ -23,7 +25,7 @@ const styles = (theme) => ({
 	},
 	avatar: {
 		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main
+		backgroundColor: "blue"
 	},
 	form: {
 		width: '100%',
@@ -54,14 +56,14 @@ const Signin = (props) => {
         console.log("Showing Signin Component");
         // console.log(props);
         if (localStorage.AssembleAuthToken){
-            console.log("~ User is already signed in. Let them through!")
+            console.log("       User is already signed in. Let them through!")
             navigate(`/`);
         } 
     }, [props]);
 
     // Update the email/password state when typing
     const changeHandler = e => {
-        console.log(e.target.name + " was changed");
+        // console.log("       " + e.target.name + " was changed");
         if (e.target.name === "email"){
             setEmail(e.target.value);
         } 
@@ -71,22 +73,44 @@ const Signin = (props) => {
 	};
     
     // Verify the email/password when SIGN IN button is clicked
-    const submitHandler = e => {
+    const regularSubmitHandler = async (e) => {
         e.preventDefault();
-        console.log("SIGN IN was clicked");
-
         setLoading(true);
-        const userData = { email, password };
-        console.log(`TODO: Attempt sign-in with ${userData}`)
+        // console.log("       SIGN IN was clicked");
 
-        // successful
-        // localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-        localStorage.setItem('AssembleAuthToken', `TEMP`);
-        setLoading(false);
-        navigate(`/`);
+        await signInWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                console.log(`TODO: Fetch user from Firestore db`);
 
-        // unsuccessful
-        // error handling..
+                localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                setLoading(false);
+                navigate(`/`);
+            })
+            .catch((error) => {
+                // TODO: Catch common errors
+                window.alert(error.message);
+                setLoading(false);
+            });
+    }
+
+    // Show Google Sign-In Popup when SIGN IN WITH GOOGLE button is clicked
+    const googleSubmitHandler = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        signInWithPopup(auth, provider)
+            .then(result => {
+                console.log(`TODO: Fetch user from Firestore db`);
+
+                localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                setLoading(false);
+                navigate(`/`);
+            })
+            .catch((error) => {
+                // TODO: Catch common errors
+                window.alert(error.message);
+                setLoading(false);
+            });
     }
 
     return (<>
@@ -95,7 +119,7 @@ const Signin = (props) => {
 
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <LockIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign In
@@ -106,7 +130,11 @@ const Signin = (props) => {
                     
                     <TextField id="password" variant="outlined" margin="normal" required fullWidth label="Password" name="password" type="password" autoComplete="current-password" onChange={changeHandler} />
                     
-                    <Button type="submit"  variant="contained" fullWidth color="primary" className={classes.submit} onClick={submitHandler} disabled={loading || !email || !password} > Sign In {loading && <CircularProgress size={30} className={classes.progess} />}</Button>
+                    <Button type="submit"  variant="contained" fullWidth color="primary" className={classes.submit} onClick={regularSubmitHandler} disabled={loading || !email || !password} > Sign In {loading && <CircularProgress size={30} className={classes.progess} />}</Button>
+                    
+                    <Button type="submit"  variant="contained" fullWidth color="primary" className={classes.submit} onClick={googleSubmitHandler} hidden={loading && true}> 
+                        <GoogleIcon/> &nbsp; Sign in with Google 
+                    </Button>
 
                     <Grid container>
                         <Grid item>

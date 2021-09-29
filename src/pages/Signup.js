@@ -1,6 +1,7 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
+import { auth, createUserWithEmailAndPassword } from '../util/auth';
 
 // @material-ui Imports
 import Avatar from '@material-ui/core/Avatar';
@@ -9,11 +10,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import withStyles from '@material-ui/core/styles/withStyles';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import LockIcon from '@mui/icons-material/Lock';
+import CircularProgress from '@mui/material/CircularProgress';
 const styles = (theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
@@ -23,7 +24,7 @@ const styles = (theme) => ({
 	},
 	avatar: {
 		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main
+		backgroundColor: "blue"
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
@@ -53,14 +54,14 @@ const Signup = (props) => {
         console.log("Showing Signup Component");
         // console.log(props);
         if (localStorage.AssembleAuthToken){
-            console.log("~ User is already signed in. Let them through!")
+            console.log("       User is already signed in. Let them through!")
             navigate(`/`);
         } 
     }, [props]);
 
     // Update the respective state when typing
     const changeHandler = e => {
-        console.log(e.target.name + " was changed");
+        // console.log(e.target.name + " was changed");
         if (e.target.name === "firstName"){
             setFirstName(e.target.value);
         } 
@@ -86,22 +87,26 @@ const Signup = (props) => {
 	};
     
     // Verify the form info when SIGN IN button is clicked
-    const submitHandler = e => {
+    const regularSubmitHandler = async (e) => {
         e.preventDefault();
-        console.log("SIGN UP was clicked");
-
         setLoading(true);
-        const newUserData = { firstName, lastName, userName, email, password, confirmPassword };
-        console.log(`TODO: Attempt registration with ${newUserData}`)
+        // console.log("SIGN UP was clicked");
+        
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                console.log(`TODO: Firestore db registration of firstName, lastName, userName`)
+                // const userUID = result.user.uid;
+                // const newUserData = { firstName, lastName, userName, email, password, confirmPassword };
 
-        // successful
-        // localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-        localStorage.setItem('AssembleAuthToken', `TEMP`);
-        setLoading(false);
-        navigate(`/`);
-
-        // unsuccessful
-        // error handling..
+                localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                setLoading(false);
+                navigate(`/`);
+            })
+            .catch((error) => {
+                // TODO: Catch common errors
+                window.alert(error.message);
+                setLoading(false);
+            });
     }
 
     return (<>
@@ -110,7 +115,7 @@ const Signup = (props) => {
 
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <LockIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign Up
@@ -138,7 +143,7 @@ const Signup = (props) => {
                             <TextField id="confirmPassword" variant="outlined" required fullWidth name="confirmPassword" label="Confirm Password" type="password" autoComplete="current-password" onChange={changeHandler} />
                         </Grid>
                     </Grid>
-                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={submitHandler} disabled={loading || !firstName || !lastName || !userName || !email || !password || !confirmPassword  }>
+                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={regularSubmitHandler} disabled={loading || !firstName || !lastName || !userName || !email || !password || !confirmPassword  }>
                         Sign Up
                         {loading && <CircularProgress size={30} className={classes.progess} />}
                     </Button>
