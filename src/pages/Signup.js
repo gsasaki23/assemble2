@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
 import { auth, createUserWithEmailAndPassword } from '../util/auth';
+import { checkUIDExists } from '../util/firestore';
 
 // @material-ui Imports
 import Avatar from '@material-ui/core/Avatar';
@@ -100,6 +101,7 @@ const Signup = (props) => {
 
                 localStorage.setItem('AssembleAuthToken', result.user.accessToken);
                 localStorage.setItem('AssembleAuthUID', result.user.uid);
+                localStorage.setItem('AuthType', "EP");
                 setLoading(false);
                 navigate(`/`);
             })

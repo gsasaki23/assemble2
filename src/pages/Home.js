@@ -1,6 +1,7 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
+import { checkUIDExists } from '../util/firestore';
 
 // Component Imports
 import Account from '../components/Account';
@@ -82,20 +83,30 @@ const Home = (props) => {
 
     useEffect(()=>{
         console.log("Showing Home Component");
-
         const authToken = localStorage.getItem('AssembleAuthToken');
         const authUID = localStorage.getItem('AssembleAuthUID');
-        if (!authToken || !authUID) {
-            console.log("User is not logged in. Transferring to /signin")
-            navigate(`/signin`);
-        } else {
-            // TODO: Verify Token with firebase
+        const authType = localStorage.getItem('AuthType');
 
-            console.log(`User is logged in with authToken ${authToken}`)
-            console.log(`User is logged in with authUID ${authUID}`)
-            setUserData({firstName: "Tom", lastName: "Bradley"});
-            setUiLoading(false);
-        }
+        // Bounce if both an AuthToken and AuthUID are NOT found
+        if (!authToken || !authUID) {
+            window.alert("Home.js: No auth info. Transferring to /signin");
+            navigate(`/signin`);
+        } 
+
+        // Get user based on Auth UID. Bounce if NOT found
+        checkUIDExists(authUID)
+            .then(res => {
+                if (res.result === false) {
+                    window.alert("Home.js: No UID match. Transferring to /signin");
+                    localStorage.removeItem('AssembleAuthToken');
+                    localStorage.removeItem('AssembleAuthUID');
+                    navigate(`/signin`);
+                } 
+                else {
+                    setUserData(res.userDocument);
+                    setUiLoading(false);
+                }
+            })
     }, [props]);
 
     return uiLoading === true

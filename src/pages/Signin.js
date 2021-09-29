@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
 import { auth, provider, signInWithEmailAndPassword, signInWithPopup } from '../util/auth';
+import { checkUIDExists } from '../util/firestore';
 
 // @material-ui Imports
 import Avatar from '@material-ui/core/Avatar';
@@ -80,10 +81,9 @@ const Signin = (props) => {
 
         await signInWithEmailAndPassword(auth, email, password)
             .then((result) => {
-                console.log(`TODO: Fetch user from Firestore db`);
-
                 localStorage.setItem('AssembleAuthToken', result.user.accessToken);
                 localStorage.setItem('AssembleAuthUID', result.user.uid);
+                localStorage.setItem('AuthType', "EP");
                 setLoading(false);
                 navigate(`/`);
             })
@@ -101,12 +101,20 @@ const Signin = (props) => {
 
         signInWithPopup(auth, provider)
             .then(result => {
-                console.log(`TODO: Fetch user from Firestore db`);
-
-                localStorage.setItem('AssembleAuthToken', result.user.accessToken);
-                localStorage.setItem('AssembleAuthUID', result.user.uid);
-                setLoading(false);
-                navigate(`/`);
+                checkUIDExists(result.user.uid)
+                    .then(res => {
+                        if (res.result === false) {
+                            window.alert("TODO: If this is the first time signing in with google, please sign up!");
+                            navigate(`/signup`);
+                        }
+                        else {
+                            localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                            localStorage.setItem('AssembleAuthUID', result.user.uid);
+                            localStorage.setItem('AuthType', "Google");
+                            setLoading(false);
+                            navigate(`/`);
+                        }
+                    })
             })
             .catch((error) => {
                 // TODO: Catch common errors
