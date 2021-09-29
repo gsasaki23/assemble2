@@ -1,5 +1,5 @@
 // Firebase
-import { getFirestore, collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where, addDoc, Timestamp } from "firebase/firestore";
 // import { onSnapshot, serverTimestamp, addDoc } from "firebase/firestore";
 
 // Firestore Configuration
@@ -17,6 +17,17 @@ const checkUIDExists = async (authUID) => {
     return {result: true, userDocument};
 }
 
+const createUser = async (newUserData) => {
+    let res = await addDoc(usersRef, {
+        assembleUserName: newUserData.userName,
+        authUID: newUserData.authUID,
+        createdAt: Timestamp.fromDate(new Date()),
+        firstName: newUserData.firstName,
+        lastName: newUserData.lastName
+    });
+    return res;
+}
+
 export {
-    db, query, where, getDocs, addDoc, checkUIDExists, usersRef
+    db, query, where, getDocs, addDoc, checkUIDExists, createUser, usersRef
 }

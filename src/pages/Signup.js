@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
 import { auth, createUserWithEmailAndPassword } from '../util/auth';
-import { checkUIDExists } from '../util/firestore';
+import { createUser } from '../util/firestore';
 
 // @material-ui Imports
 import Avatar from '@material-ui/core/Avatar';
@@ -95,15 +95,20 @@ const Signup = (props) => {
         
         await createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
-                console.log(`TODO: Firestore db registration of firstName, lastName, userName`)
-                // const userUID = result.user.uid;
-                // const newUserData = { firstName, lastName, userName, email, password, confirmPassword };
-
-                localStorage.setItem('AssembleAuthToken', result.user.accessToken);
-                localStorage.setItem('AssembleAuthUID', result.user.uid);
-                localStorage.setItem('AuthType', "EP");
-                setLoading(false);
-                navigate(`/`);
+                const userUID = result.user.uid;
+                const newUserData = { firstName, lastName, userName, authUID: userUID };
+                createUser(newUserData)
+                    .then(() => {
+                        localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                        localStorage.setItem('AssembleAuthUID', userUID);
+                        setLoading(false);
+                        navigate(`/`);
+                    })
+                    .catch((error) => {
+                        // TODO: Catch common errors
+                        window.alert(error.message);
+                        setLoading(false);
+                    });
             })
             .catch((error) => {
                 // TODO: Catch common errors

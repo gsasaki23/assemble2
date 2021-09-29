@@ -85,7 +85,6 @@ const Home = (props) => {
         console.log("Showing Home Component");
         const authToken = localStorage.getItem('AssembleAuthToken');
         const authUID = localStorage.getItem('AssembleAuthUID');
-        const authType = localStorage.getItem('AuthType');
 
         // Bounce if both an AuthToken and AuthUID are NOT found
         if (!authToken || !authUID) {

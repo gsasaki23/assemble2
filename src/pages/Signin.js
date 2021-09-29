@@ -83,7 +83,6 @@ const Signin = (props) => {
             .then((result) => {
                 localStorage.setItem('AssembleAuthToken', result.user.accessToken);
                 localStorage.setItem('AssembleAuthUID', result.user.uid);
-                localStorage.setItem('AuthType', "EP");
                 setLoading(false);
                 navigate(`/`);
             })
@@ -110,7 +109,6 @@ const Signin = (props) => {
                         else {
                             localStorage.setItem('AssembleAuthToken', result.user.accessToken);
                             localStorage.setItem('AssembleAuthUID', result.user.uid);
-                            localStorage.setItem('AuthType', "Google");
                             setLoading(false);
                             navigate(`/`);
                         }
