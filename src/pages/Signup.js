@@ -1,7 +1,7 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
-import { auth, createUserWithEmailAndPassword } from '../util/auth';
+import { auth, provider, signInWithPopup, createUserWithEmailAndPassword } from '../util/auth';
 import { createUser } from '../util/firestore';
 
 // @material-ui Imports
@@ -16,6 +16,8 @@ import Container from '@material-ui/core/Container';
 import withStyles from '@material-ui/core/styles/withStyles';
 import LockIcon from '@mui/icons-material/Lock';
 import CircularProgress from '@mui/material/CircularProgress';
+import GoogleIcon from '@mui/icons-material/Google';
+
 const styles = (theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
@@ -87,7 +89,7 @@ const Signup = (props) => {
         }
 	};
     
-    // Verify the form info when SIGN IN button is clicked
+    // Verify the form info when SIGN UP button is clicked
     const regularSubmitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -95,6 +97,37 @@ const Signup = (props) => {
         
         await createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
+                const userUID = result.user.uid;
+                const newUserData = { firstName, lastName, userName, authUID: userUID };
+                createUser(newUserData)
+                    .then(() => {
+                        localStorage.setItem('AssembleAuthToken', result.user.accessToken);
+                        localStorage.setItem('AssembleAuthUID', userUID);
+                        setLoading(false);
+                        navigate(`/`);
+                    })
+                    .catch((error) => {
+                        // TODO: Catch common errors
+                        window.alert(error.message);
+                        setLoading(false);
+                    });
+            })
+            .catch((error) => {
+                // TODO: Catch common errors
+                window.alert(error.message);
+                setLoading(false);
+            });
+    }
+    
+    //Show Google Sign-In Popup when SIGN IN WITH GOOGLE button is clicked
+    const googleSubmitHandler = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        signInWithPopup(auth, provider)
+            .then(result => {
+                console.log(result.user);
+
                 const userUID = result.user.uid;
                 const newUserData = { firstName, lastName, userName, authUID: userUID };
                 createUser(newUserData)
@@ -142,6 +175,12 @@ const Signup = (props) => {
                             <TextField id="username" variant="outlined" required fullWidth label="Username"  name="username" autoComplete="username" helperText={errors.username} error={errors.username ? true : false} onChange={changeHandler} />
                         </Grid>
                         <Grid item xs={12}>
+                            <Button type="submit"  variant="contained" fullWidth color="primary" className={classes.submit} onClick={googleSubmitHandler} disabled={loading || !firstName || !lastName || !userName }> 
+                                <GoogleIcon/> &nbsp; Sign up with Google 
+                                {loading && <CircularProgress size={30} className={classes.progess} />}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
                             <TextField id="email" variant="outlined" required fullWidth label="Email Address" name="email" autoComplete="email" helperText={errors.email} error={errors.email ? true : false} onChange={changeHandler} />
                         </Grid>
                         <Grid item xs={12}>
@@ -151,10 +190,14 @@ const Signup = (props) => {
                             <TextField id="confirmPassword" variant="outlined" required fullWidth name="confirmPassword" label="Confirm Password" type="password" autoComplete="current-password" onChange={changeHandler} />
                         </Grid>
                     </Grid>
-                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={regularSubmitHandler} disabled={loading || !firstName || !lastName || !userName || !email || !password || !confirmPassword  }>
+
+                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={regularSubmitHandler} disabled={loading || !firstName || !lastName || !userName || !email || !password || !confirmPassword }>
                         Sign Up
                         {loading && <CircularProgress size={30} className={classes.progess} />}
                     </Button>
+
+                    
+
                     <Grid container>
                         <Grid item>
                             <Link href="/signin" variant="body2">
