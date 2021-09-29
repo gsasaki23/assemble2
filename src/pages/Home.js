@@ -62,9 +62,9 @@ const styles = (theme) => ({
 
 const Home = (props) => {
     const { classes } = props;
-    const [render, setRender] = useState(false);
     const [uiLoading, setUiLoading] = useState(true);
     const [userData, setUserData] = useState({}); // firstName, lastName
+    const [render, setRender] = useState(false);
 
     const loadAccountPage = e => {
         // e.preventDefault();
@@ -81,15 +81,15 @@ const Home = (props) => {
 
     useEffect(()=>{
         console.log("Showing Home Component");
-        console.log(props);
 
-        // authMiddleWare(props.history);
-        const authToken = localStorage.getItem('AuthToken');
+        const authToken = localStorage.getItem('AssembleAuthToken');
 		// TODO: Verify Token with firebase
         console.log(authToken);
         if (!authToken) {
             console.log("User is logged out. Transferring to /signin")
             navigate(`/signin`);
+        } else {
+            console.log(`User is logged in with authToken ${authToken}`)
         }
 
         setUserData({firstName: "Tom", lastName: "Bradley"});
