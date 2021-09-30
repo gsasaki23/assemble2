@@ -164,7 +164,7 @@ const Home = (props) => {
             </List>
         </Drawer>
 
-        <div>{render ? <Account userData={userData} /> : <Dashboard />}</div>
+        <div>{render ? <Account userData={userData} /> : <Dashboard userData={userData}/>}</div>
         
     </>
     );
