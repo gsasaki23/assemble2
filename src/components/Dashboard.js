@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = (theme) => ({
-    todoTop:{
+    top:{
         margin: "10% 0% 0% 15%",
         backgroundColor: "blue",
         textAlign: "center",
@@ -10,18 +10,18 @@ const styles = (theme) => ({
     }
 });
 
-const Todo = (props) => {
+const Dashboard = (props) => {
     const { classes } = props;
 
     useEffect(()=>{
-        console.log("Showing Todo Component");
+        console.log("Showing Dashboard Component");
     }, []);
 
     return (
         <>
-            <h1 className={classes.todoTop}>Todo</h1>
+            <h1 className={classes.top}>Dashboard</h1>
         </>
     );
 };
 
-export default withStyles(styles)(Todo);
+export default withStyles(styles)(Dashboard);

@@ -5,7 +5,7 @@ import { checkUIDExists } from '../util/firestore';
 
 // Component Imports
 import Account from '../components/Account';
-import Todo from '../components/Todo';
+import Dashboard from '../components/Dashboard';
 
 // @material-ui Imports
 import Drawer from '@material-ui/core/Drawer';
@@ -64,14 +64,14 @@ const styles = (theme) => ({
 const Home = (props) => {
     const { classes } = props;
     const [uiLoading, setUiLoading] = useState(true);
-    const [userData, setUserData] = useState({}); // firstName, lastName
+    const [userData, setUserData] = useState({});
     const [render, setRender] = useState(false);
 
     const loadAccountPage = e => {
         // e.preventDefault();
         setRender(true);
     }
-    const loadTodoPage = e => {
+    const loadDashboardPage = e => {
         // e.preventDefault();
         setRender(false);
     }
@@ -146,14 +146,6 @@ const Home = (props) => {
                 </center>
             <Divider />
             <List>
-                <ListItem button key="Todo" onClick={loadTodoPage}>
-                    <ListItemIcon>
-                        {' '}
-                        <NotesIcon />{' '}
-                    </ListItemIcon>
-                    <ListItemText primary="Todo" />
-                </ListItem>
-
                 <ListItem button key="Account" onClick={loadAccountPage}>
                     <ListItemIcon>
                         {' '}
@@ -161,10 +153,18 @@ const Home = (props) => {
                     </ListItemIcon>
                     <ListItemText primary="Account" />
                 </ListItem>
+
+                <ListItem button key="Dashboard" onClick={loadDashboardPage}>
+                    <ListItemIcon>
+                        {' '}
+                        <NotesIcon />{' '}
+                    </ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
             </List>
         </Drawer>
 
-        <div>{render ? <Account /> : <Todo />}</div>
+        <div>{render ? <Account userData={userData} /> : <Dashboard />}</div>
         
     </>
     );
