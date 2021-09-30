@@ -18,12 +18,12 @@ const checkUIDExists = async (authUID) => {
 }
 
 const createUser = async (newUserData) => {
+    const {userName, authType, authUID, firstName, lastName} = newUserData;
     let res = await addDoc(usersRef, {
-        assembleUserName: newUserData.userName,
-        authUID: newUserData.authUID,
+        authType, authUID, firstName, lastName, 
+        assembleUserName: userName,
+        teams: [],
         createdAt: Timestamp.fromDate(new Date()),
-        firstName: newUserData.firstName,
-        lastName: newUserData.lastName
     });
     return res;
 }

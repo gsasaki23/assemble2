@@ -98,7 +98,7 @@ const Signup = (props) => {
         await createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 const userUID = result.user.uid;
-                const newUserData = { firstName, lastName, userName, authUID: userUID };
+                const newUserData = { firstName, lastName, userName, authUID: userUID, authType: "email" };
                 createUser(newUserData)
                     .then(() => {
                         localStorage.setItem('AssembleAuthToken', result.user.accessToken);
@@ -129,7 +129,7 @@ const Signup = (props) => {
                 console.log(result.user);
 
                 const userUID = result.user.uid;
-                const newUserData = { firstName, lastName, userName, authUID: userUID };
+                const newUserData = { firstName, lastName, userName, authUID: userUID, authType: "google" };
                 createUser(newUserData)
                     .then(() => {
                         localStorage.setItem('AssembleAuthToken', result.user.accessToken);
