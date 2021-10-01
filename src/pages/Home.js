@@ -6,6 +6,7 @@ import { checkUIDExists } from '../util/firestore';
 // Component Imports
 import Account from '../components/Account';
 import Dashboard from '../components/Dashboard';
+import TeamTab from '../components/TeamTab';
 
 // @material-ui Imports
 import Drawer from '@material-ui/core/Drawer';
@@ -27,6 +28,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import GroupIcon from '@mui/icons-material/Group';
 const drawerWidth = "15%";
 
 const styles = (theme) => ({
@@ -65,15 +67,16 @@ const Home = (props) => {
     const { classes } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [userData, setUserData] = useState({});
-    const [render, setRender] = useState(false);
+    const [renderTab, setRenderTab] = useState("Dashboard");
 
     const loadAccountPage = e => {
-        // e.preventDefault();
-        setRender(true);
+        setRenderTab("Account");
     }
     const loadDashboardPage = e => {
-        // e.preventDefault();
-        setRender(false);
+        setRenderTab("Dashboard");
+    }
+    const selectTeamTab = e => {
+        setRenderTab(e.target.innerHTML);
     }
     const logoutHandler = e => {
 		localStorage.removeItem('AssembleAuthToken');
@@ -125,7 +128,7 @@ const Home = (props) => {
                     </IconButton>
 
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        🔥 Assemble2 🔥
+                        🔥 Assemble2 🔥 © 2021 by Gaku Sasaki
                     </Typography>
 
                     <Button color="inherit" className={classes.logoutLabel} onClick={logoutHandler}>Logout</Button>
@@ -161,10 +164,29 @@ const Home = (props) => {
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" />
                 </ListItem>
+
+                {
+                    userData.teams.map(function(team, i){
+                        return (<ListItem button key={i} onClick={selectTeamTab}>
+                        <ListItemIcon>
+                            {' '}
+                            <GroupIcon />{' '}
+                        </ListItemIcon>
+                        <ListItemText primary={team} />
+                    </ListItem>);
+                })}
+
+                
             </List>
         </Drawer>
 
-        <div>{render ? <Account userData={userData} /> : <Dashboard userData={userData}/>}</div>
+        <div>{ 
+            renderTab === "Account" 
+            ? <Account userData={userData} /> 
+            : renderTab === "Dashboard"
+                ? <Dashboard userData={userData}/>
+                : <TeamTab userData={userData} teamID={renderTab}/>
+        }</div>
         
     </>
     );

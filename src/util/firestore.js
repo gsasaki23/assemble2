@@ -5,6 +5,7 @@ import { getFirestore, collection, getDocs, query, where, addDoc, Timestamp } fr
 // Firestore Configuration
 const db = getFirestore();
 const usersRef = collection(db, "users");
+const teamsRef = collection(db, "teams");
 
 const checkUIDExists = async (authUID) => {
     const uidCheckQuery = query(usersRef, where("authUID", "==", authUID));
@@ -29,5 +30,5 @@ const createUser = async (newUserData) => {
 }
 
 export {
-    db, query, where, getDocs, addDoc, checkUIDExists, createUser, usersRef
+    db, query, where, getDocs, addDoc, checkUIDExists, createUser, usersRef, teamsRef
 }
