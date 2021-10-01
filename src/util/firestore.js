@@ -1,5 +1,5 @@
 // Firebase
-import { getFirestore, collection, getDocs, query, where, addDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, getDocs, query, where, addDoc, Timestamp } from "firebase/firestore";
 // import { onSnapshot, serverTimestamp } from "firebase/firestore";
 
 // Firestore Configuration
@@ -29,6 +29,13 @@ const createUser = async (newUserData) => {
     return res;
 }
 
+const getTeamDataByID = async (teamId) => {
+    const teamDocSnapshot = await getDoc(doc(db, "teams", teamId));
+    return {result: true, teamDocument: teamDocSnapshot.data()};
+}
+
 export {
-    db, query, where, getDocs, addDoc, checkUIDExists, createUser, usersRef, teamsRef
+    db, query, where, getDocs, addDoc, 
+    usersRef, checkUIDExists, createUser, 
+    teamsRef, getTeamDataByID
 }

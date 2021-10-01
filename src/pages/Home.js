@@ -1,7 +1,7 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
-import { checkUIDExists } from '../util/firestore';
+import { checkUIDExists, getTeamDataByID } from '../util/firestore';
 
 // Component Imports
 import Account from '../components/Account';
@@ -67,8 +67,9 @@ const Home = (props) => {
     const { classes } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [userData, setUserData] = useState({});
+    const [teamsData, setTeamsData] = useState([]);
     const [renderTab, setRenderTab] = useState("Dashboard");
-
+    
     const loadAccountPage = e => {
         setRenderTab("Account");
     }
@@ -106,6 +107,21 @@ const Home = (props) => {
                 } 
                 else {
                     setUserData(res.userDocument);
+                    // Get every associated team's data
+                    res.userDocument.teams.forEach(team => {
+                        getTeamDataByID(team)
+                            .then(res => {
+                                if (res.result === false) {
+                                    window.alert("Home.js: No Team ID match. Transferring to Dashboard");
+                                    setRenderTab("Dashboard");
+                                } 
+                                else {
+                                    let newTeamDocument = res.teamDocument;
+                                    newTeamDocument.id = team;
+                                    setTeamsData((teamsData)=>[...teamsData, newTeamDocument]);
+                                }
+                            })
+                    })
                     setUiLoading(false);
                 }
             })
@@ -164,19 +180,17 @@ const Home = (props) => {
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" />
                 </ListItem>
-
-                {
-                    userData.teams.map(function(team, i){
-                        return (<ListItem button key={i} onClick={selectTeamTab}>
+                
+                { teamsData.map((team,i) => (
+                    <ListItem button key={i}>
                         <ListItemIcon>
                             {' '}
                             <GroupIcon />{' '}
                         </ListItemIcon>
-                        <ListItemText primary={team} />
-                    </ListItem>);
-                })}
+                        <ListItemText primary={team.teamName} onClick={selectTeamTab}/>
+                    </ListItem>
+                ))}
 
-                
             </List>
         </Drawer>
 
@@ -185,7 +199,7 @@ const Home = (props) => {
             ? <Account userData={userData} /> 
             : renderTab === "Dashboard"
                 ? <Dashboard userData={userData}/>
-                : <TeamTab userData={userData} teamID={renderTab}/>
+                : <TeamTab userData={userData} teamName={renderTab} teamsData={teamsData}/>
         }</div>
         
     </>

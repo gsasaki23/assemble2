@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 
 // @material-ui Imports
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
+// import Grid from '@material-ui/core/Grid';
+// import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
+// import Button from '@material-ui/core/Button';
 
 const styles = (theme) => ({
     TeamTabTop:{
@@ -19,16 +19,24 @@ const styles = (theme) => ({
 });
 
 const TeamTab = (props) => {
-    const { classes, userData, teamID } = props;
+    const { classes, userData, teamName, teamsData } = props;
     const [uiLoading, setUiLoading] = useState(true);
+    const [teamData, setTeamData] = useState({});
 
 
     useEffect(()=>{
         console.log("Showing TeamTab Component");
         console.log(userData);
-        console.log(teamID);
+        console.log(teamName);
+        console.log(teamsData);
+        for (let team in teamsData) {
+            if (teamsData[team].teamName === teamName) {
+                setTeamData(teamsData[team]);
+            }
+        }
+
         setUiLoading(false);
-    }, [props, userData, teamID]);
+    }, [props, userData, teamName, teamsData]);
 
     return uiLoading === true
     ? (<>
@@ -40,6 +48,8 @@ const TeamTab = (props) => {
         <Container component="main">
             <CssBaseline />
             <h1 className={classes.TeamTabTop}>TeamTab</h1>
+            <h1 className={classes.TeamTabTop}>Team Name: {teamName}</h1>
+            <h1 className={classes.TeamTabTop}>Team Name: {teamData.teamName}</h1>
 
             {/* army of cards here? */}
 
