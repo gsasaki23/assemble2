@@ -144,10 +144,10 @@ const Home = (props) => {
                     </IconButton>
 
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        🔥 Assemble2 🔥 © 2021 by Gaku Sasaki
+                        🔥 Assemble2 🔥
                     </Typography>
 
-                    <Button color="inherit" className={classes.logoutLabel} onClick={logoutHandler}>Logout</Button>
+                    <Button color="inherit" className={classes.logoutLabel} onClick={logoutHandler}>© 2021 by Gaku Sasaki &nbsp; &nbsp; Logout</Button>
                     <ExitToAppIcon onClick={logoutHandler}/>
                 </Toolbar>
             </AppBar>
@@ -180,7 +180,7 @@ const Home = (props) => {
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" />
                 </ListItem>
-                
+
                 { teamsData.map((team,i) => (
                     <ListItem button key={i}>
                         <ListItemIcon>
