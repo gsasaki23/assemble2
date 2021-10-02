@@ -38,8 +38,8 @@ const Dashboard = (props) => {
             <h1 className={classes.dashboardTop}>Dashboard</h1>
             <h1 className={classes.dashboardTop}>All pending events that await user response</h1>
             <h1 className={classes.dashboardTop}>All pending events that already has user response</h1>
-            <h1 className={classes.dashboardTop}>History? All completed events</h1>
-            <h1 className={classes.dashboardTop}>Calendar View?</h1>
+            <h1 className={classes.dashboardTop}>Calendar View</h1>
+            <h1 className={classes.dashboardTop}>Create/Manage Teams (High Level)</h1>
 
         </Container>
     </>
