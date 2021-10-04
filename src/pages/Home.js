@@ -158,6 +158,10 @@ const Home = (props) => {
             <div className={classes.toolbar} />
             <Divider />
                 <center>
+                    <h5 className={classes.userName}>
+                        {' '}
+                        @{userData.assembleUserName}
+                    </h5>
                     <p className={classes.userName}>
                         {' '}
                         {userData.firstName} {userData.lastName}
