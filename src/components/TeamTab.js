@@ -1,28 +1,52 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 // @material-ui Imports
 import CssBaseline from '@material-ui/core/CssBaseline';
 import withStyles from '@material-ui/core/styles/withStyles';
-// import Grid from '@material-ui/core/Grid';
-// import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
-// import Button from '@material-ui/core/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 const styles = (theme) => ({
     TeamTabTop:{
         margin: "10% 0% 0% 15%",
         textAlign: "center",
         border: "2px solid black",
-    }
+    },
+    eventsGrid:{
+        margin: "5% 0% 0% 15%",
+    },
+    eventCard:{
+        minWidth: 470
+    },
+	bullet: {
+		display: 'inline-block',
+		margin: '0 2px',
+		transform: 'scale(0.8)'
+	},
+	pos: {
+		marginBottom: 12
+	},
 });
 
 const TeamTab = (props) => {
     const { classes, userData, teamName, teamsData } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [teamData, setTeamData] = useState({});
+    dayjs.extend(relativeTime);
 
+    const tempEventButtonListener = e => {
+        e.preventDefault();
+        console.log(teamData);
+    };
 
     useEffect(()=>{
         console.log("Showing TeamTab Component");
@@ -48,10 +72,36 @@ const TeamTab = (props) => {
         <Container component="main">
             <CssBaseline />
             <h1 className={classes.TeamTabTop}>TeamTab</h1>
-            <h1 className={classes.TeamTabTop}>Team Name: {teamName}</h1>
-            <h1 className={classes.TeamTabTop}>Team Name: {teamData.teamName}</h1>
 
-            {/* army of cards here? */}
+            <Grid className={classes.eventsGrid} container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <Card className={classes.eventCard} variant="outlined">
+                        <CardContent>
+                            <Typography variant="h5" component="h2">
+                                {"Event Name"}
+                            </Typography>
+                            <Typography className={classes.pos} color="textSecondary">
+                                {dayjs(teamData.createdAt).fromNow()}
+                            </Typography>
+                            <Typography variant="body2" component="p">
+                                {`Event Description`}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small" color="primary" onClick={tempEventButtonListener}>
+                                {' '}
+                                View{' '}
+                            </Button>
+                            <Button size="small" color="primary" onClick={tempEventButtonListener}>
+                                Edit
+                            </Button>
+                            <Button size="small" color="primary" onClick={tempEventButtonListener}>
+                                Delete
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
 
         </Container>
     </>

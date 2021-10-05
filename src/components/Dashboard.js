@@ -22,7 +22,7 @@ const Dashboard = (props) => {
 
     useEffect(()=>{
         console.log("Showing Dashboard Component");
-        console.log(userData);
+        // console.log(userData);
         setUiLoading(false);
     }, [props, userData]);
 

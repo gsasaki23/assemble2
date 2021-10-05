@@ -74,9 +74,7 @@ const Account = (props) => {
 
     useEffect(()=>{
         console.log("Showing Account Component");
-
-        console.log(userData);
-
+        // console.log(userData);
         setUiLoading(false);
     }, [props, userData]);
 
