@@ -35,7 +35,7 @@ const getTeamDataByID = async (teamId) => {
 }
 
 export {
-    db, query, where, getDocs, addDoc, 
+    db, query, where, getDocs, addDoc, Timestamp,
     usersRef, checkUIDExists, createUser, 
     teamsRef, getTeamDataByID
 }
