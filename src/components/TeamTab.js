@@ -18,10 +18,16 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Toolbar from '@mui/material/Toolbar';
+import TextField from '@mui/material/TextField';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterMoment from '@mui/lab/AdapterMoment';
 
 
 const styles = (theme) => ({
@@ -30,32 +36,11 @@ const styles = (theme) => ({
         textAlign: "center",
         border: "2px solid black",
     },
-    appBar: {
-        position: 'relative'
-    },
-    title: {
-		marginLeft: theme.spacing(2),
-		flex: 1
-	},
-    submitButton: {
-		display: 'block',
-		color: 'white',
-		textAlign: 'center',
-        verticalAlign: 'center',
-		position: 'absolute',
-		top: 14,
-		right: 10
-	},
     newButton: {
         position: 'fixed',
 		bottom: 0,
 		right: 0
     },
-    form: {
-		width: '98%',
-		marginLeft: 13,
-		marginTop: theme.spacing(3)
-	},
     eventsGrid:{
         margin: "5% 0% 0% 15%",
     },
@@ -70,16 +55,29 @@ const styles = (theme) => ({
 	pos: {
 		marginBottom: 12
 	},
+    form:{
+        margin: "5% 0% 0% 15%",
+        textAlign: "center"
+    },
+    marginTop5: {
+        marginTop: "5%"
+    }
 });
 
 const TeamTab = (props) => {
     const { classes, userData, teamName, teamsData } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [teamData, setTeamData] = useState({});
-    const [errors, setErrors] = useState([]);
     const [openNew, setOpenNew] = useState(false);
     const [openView, setOpenView] = useState(false);
     const [buttonType, setButtonType] = useState('');
+    // New Event Form States
+    const [eventName, setEventName] = useState("");
+    const [eventLocation, setEventLocation] = useState("");
+    const [eventStartDateTime, setEventStartDateTime] = useState(new Date());
+    const [eventEndDateTime, setEventEndDateTime] = useState(new Date());
+    const [eventNotes, setEventNotes] = useState("");
+    const [errors, setErrors] = useState({});
     dayjs.extend(relativeTime);
 
     const tempEventButtonListener = e => {
@@ -145,7 +143,6 @@ const TeamTab = (props) => {
                 setTeamData(teamsData[team]);
             }
         }
-
         setUiLoading(false);
     }, [props, userData, teamName, teamsData]);
 
@@ -161,28 +158,102 @@ const TeamTab = (props) => {
             <h1 className={classes.TeamTabTop}>TeamTab</h1>
 
             {/* New Event Popup */}
-            <Dialog fullScreen open={openNew} onClose={closeNewHandler}>
-                <AppBar className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={closeNewHandler} aria-label="close">
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            {buttonType === 'Edit' ? 'Edit Event' : 'Create a new Event'}
-                        </Typography>
-                        <Button autoFocus color="inherit" onClick={submitHandler} className={classes.submitButton} >
-                            {buttonType === 'Edit' ? 'Save' : 'Submit'}
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-
-                <form className={classes.form} noValidate>
+            <Dialog open={openNew} onClose={closeNewHandler}>
+                <DialogTitle>{buttonType === 'Edit' ? 'Edit Event' : 'Create Event'}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Assemble your team by creating a new event!
+                    </DialogContentText>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            Each Event input field here
+                        <Grid item xs={12} className={classes.marginTop5}>
+                            <TextField 
+                                id="eventName" 
+                                name="eventName" 
+                                variant="outlined" 
+                                fullWidth 
+                                required
+                                label="Event Name" 
+                                onChange={e => {
+                                    if (e.target.value === ""){
+                                        setErrors({...errors, eventName: "We need a name for your event!"});
+                                    } else {
+                                        if (errors.eventName) {
+                                            let newErrors = {...errors};
+                                            delete newErrors.eventName;
+                                            setErrors(newErrors);
+                                        } 
+                                        setEventName(e);
+                                    }
+                                }}
+                                helperText={errors.eventName} 
+                                error={errors.eventName ? true : false}
+                            />
                         </Grid>
+                        <Grid item xs={12}>
+                            <TextField 
+                                id="eventLocation" 
+                                name="eventLocation" 
+                                variant="outlined" 
+                                fullWidth 
+                                required
+                                label="Location" 
+                                onChange={(newValue) => {setEventLocation(newValue);}}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DateTimePicker
+                                    id="eventStartDateTime" 
+                                    name="eventStartDateTime" 
+                                    variant="outlined" 
+                                    fullWidth 
+                                    required
+                                    label="Starting Date & Time"
+                                    value={eventStartDateTime}
+                                    onChange={(newValue) => {setEventStartDateTime(newValue);}}
+                                    renderInput={(props) => <TextField {...props} />}
+                                />
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DateTimePicker
+                                    id="eventEndDateTime" 
+                                    name="eventEndDateTime" 
+                                    variant="outlined" 
+                                    fullWidth 
+                                    label="Ending Date & Time"
+                                    value={eventEndDateTime}
+                                    onChange={(newValue) => {
+                                        console.log(eventStartDateTime);
+                                        console.log(newValue);
+                                        setEventEndDateTime(newValue);
+                                    }}
+                                    renderInput={(props) => <TextField {...props} />}
+                                />
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item xs={12} className={classes.marginTop5}>
+                            <TextField
+                                id="eventNotes"
+                                label="Notes"
+                                fullWidth
+                                multiline
+                                rows={4}
+                                onChange={(newValue) => {setEventNotes(newValue);}}
+                            />
+                        </Grid>
+
                     </Grid>
-                </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeNewHandler}>
+                        Cancel
+                    </Button>
+                    <Button onClick={submitHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
+                        {buttonType === 'Edit' ? 'Save' : 'Submit'}
+                    </Button>
+                </DialogActions>
             </Dialog>
 
             {/* Pending/Answered/Completed Clusters */}
