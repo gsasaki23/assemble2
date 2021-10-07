@@ -1,5 +1,5 @@
 // Firebase
-import { getFirestore, collection, doc, getDoc, getDocs, query, where, addDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, getDocs, query, where, addDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 // import { onSnapshot, serverTimestamp } from "firebase/firestore";
 
 // Firestore Configuration
@@ -34,8 +34,28 @@ const getTeamDataByID = async (teamId) => {
     return {result: true, teamDocument: teamDocSnapshot.data()};
 }
 
+const createEvent = async (teamId, newEventData) => {
+    const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = newEventData;
+    const teamDocRef = doc(db, "teams", teamId)
+    let res = await updateDoc(teamDocRef, {
+        events: arrayUnion({
+            eventId: 1,
+            eventName, 
+            location: eventLocation,
+            startDateTime: Timestamp.fromDate(eventStartDateTime),
+            endDateTime: Timestamp.fromDate(eventEndDateTime),
+            notes: eventNotes,
+            invitedMembers: [],
+            status: "pending",
+            tasks: [],
+            createdAt: Timestamp.fromDate(new Date()),
+        })
+    })
+    return res;
+}
+
 export {
     db, query, where, getDocs, addDoc, Timestamp,
     usersRef, checkUIDExists, createUser, 
-    teamsRef, getTeamDataByID
+    teamsRef, getTeamDataByID, createEvent
 }

@@ -1,6 +1,6 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
-import { Timestamp } from '../util/firestore';
+import { Timestamp, createEvent, getTeamDataByID } from '../util/firestore';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -17,17 +17,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Toolbar from '@mui/material/Toolbar';
 import TextField from '@mui/material/TextField';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterMoment from '@mui/lab/AdapterMoment';
+import Alert from '@mui/material/Alert';
+
 
 
 const styles = (theme) => ({
@@ -43,9 +43,6 @@ const styles = (theme) => ({
     },
     eventsGrid:{
         margin: "5% 0% 0% 15%",
-    },
-    eventCard:{
-        minWidth: 470
     },
 	bullet: {
 		display: 'inline-block',
@@ -78,17 +75,8 @@ const TeamTab = (props) => {
     const [eventEndDateTime, setEventEndDateTime] = useState(new Date());
     const [eventNotes, setEventNotes] = useState("");
     const [errors, setErrors] = useState({});
+    const [submitLoading, setSubmitLoading] = useState(false);
     dayjs.extend(relativeTime);
-
-    const tempEventButtonListener = e => {
-        e.preventDefault();
-        console.log(teamData);
-    };
-
-    // Update the respective state when typing
-    const changeHandler = e => {
-        console.log(e.target.name + " was changed");
-	};
 
     const deleteEventHandler = e => {
         console.log(e);
@@ -104,9 +92,38 @@ const TeamTab = (props) => {
         setOpenNew(true);
 	};
     const submitHandler = e => {
+        e.preventDefault();
         console.log("submitHandler");
-        console.log(e);
-        // firestore api call for creating event
+        if (errors.submit) {
+            let newErrors = {...errors};
+            delete newErrors.submit;
+            setErrors(newErrors);
+        } 
+        setSubmitLoading(true);
+        createEvent(teamData.id, {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes})
+            .then(() => {
+                // Alert?
+                setSubmitLoading(false);
+                setEventName("");
+                setEventLocation("");
+                setEventStartDateTime(new Date());
+                setEventEndDateTime(new Date());
+                setEventNotes("");
+                setOpenNew(false);
+                
+                // Update team data
+                getTeamDataByID(teamData.id)
+                    .then((res) => {
+                        if (res.teamDocument) setTeamData(res.teamDocument);
+                    })
+                    .catch(() => {
+                        window.alert("TeamTab.js: No Team ID match.");
+                    })
+            })
+            .catch(() => {
+                setErrors({...errors, submit: "error"})
+                setSubmitLoading(false);
+            })
     }
     const closeNewHandler = () => {
         setOpenNew(false);
@@ -135,16 +152,16 @@ const TeamTab = (props) => {
 
     useEffect(()=>{
         console.log("Showing TeamTab Component");
-        console.log(userData);
-        console.log(teamName);
-        console.log(teamsData);
+        // console.log(userData);
+        // console.log(teamName);
+        // console.log(teamsData);
         for (let team in teamsData) {
             if (teamsData[team].teamName === teamName) {
                 setTeamData(teamsData[team]);
             }
         }
         setUiLoading(false);
-    }, [props, userData, teamName, teamsData]);
+    }, [props, userData, teamName, teamsData, openNew]);
 
     return uiLoading === true
     ? (<>
@@ -155,10 +172,17 @@ const TeamTab = (props) => {
     : (<>
         <Container component="main">
             <CssBaseline />
-            <h1 className={classes.TeamTabTop}>TeamTab</h1>
+            <h1 className={classes.TeamTabTop}>{teamName}</h1>
 
             {/* New Event Popup */}
             <Dialog open={openNew} onClose={closeNewHandler}>
+                {submitLoading === true
+                ? (<>
+                    <div>
+                        {submitLoading && <CircularProgress size={125} className={classes.uiProgess} />}
+                    </div>
+                </>)
+                : (<>
                 <DialogTitle>{buttonType === 'Edit' ? 'Edit Event' : 'Create Event'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -173,16 +197,17 @@ const TeamTab = (props) => {
                                 fullWidth 
                                 required
                                 label="Event Name" 
+                                defaultValue={eventName}
                                 onChange={e => {
                                     if (e.target.value === ""){
-                                        setErrors({...errors, eventName: "We need a name for your event!"});
+                                        setErrors({...errors, eventName: "We need to know what we're assembling for!"});
                                     } else {
                                         if (errors.eventName) {
                                             let newErrors = {...errors};
                                             delete newErrors.eventName;
                                             setErrors(newErrors);
                                         } 
-                                        setEventName(e);
+                                        setEventName(e.target.value);
                                     }
                                 }}
                                 helperText={errors.eventName} 
@@ -197,7 +222,21 @@ const TeamTab = (props) => {
                                 fullWidth 
                                 required
                                 label="Location" 
-                                onChange={(newValue) => {setEventLocation(newValue);}}
+                                defaultValue={eventLocation}
+                                onChange={e => {
+                                    if (e.target.value === ""){
+                                        setErrors({...errors, eventLocation: "We need to know where to assemble!"});
+                                    } else {
+                                        if (errors.eventLocation) {
+                                            let newErrors = {...errors};
+                                            delete newErrors.eventLocation;
+                                            setErrors(newErrors);
+                                        } 
+                                        setEventLocation(e.target.value);
+                                    }
+                                }}
+                                helperText={errors.eventLocation} 
+                                error={errors.eventLocation ? true : false}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -210,7 +249,7 @@ const TeamTab = (props) => {
                                     required
                                     label="Starting Date & Time"
                                     value={eventStartDateTime}
-                                    onChange={(newValue) => {setEventStartDateTime(newValue);}}
+                                    onChange={(newValue) => { setEventStartDateTime(newValue.toDate()); }}
                                     renderInput={(props) => <TextField {...props} />}
                                 />
                             </LocalizationProvider>
@@ -224,11 +263,7 @@ const TeamTab = (props) => {
                                     fullWidth 
                                     label="Ending Date & Time"
                                     value={eventEndDateTime}
-                                    onChange={(newValue) => {
-                                        console.log(eventStartDateTime);
-                                        console.log(newValue);
-                                        setEventEndDateTime(newValue);
-                                    }}
+                                    onChange={(newValue) => { setEventEndDateTime(newValue.toDate()); }}
                                     renderInput={(props) => <TextField {...props} />}
                                 />
                             </LocalizationProvider>
@@ -236,14 +271,21 @@ const TeamTab = (props) => {
                         <Grid item xs={12} className={classes.marginTop5}>
                             <TextField
                                 id="eventNotes"
-                                label="Notes"
+                                label="Notes (Optional)"
                                 fullWidth
                                 multiline
                                 rows={4}
-                                onChange={(newValue) => {setEventNotes(newValue);}}
+                                defaultValue={eventNotes}
+                                onChange={e => {setEventNotes(e.target.value);}}
                             />
                         </Grid>
 
+                        {/* If submit errors, show this */}
+                        {errors.submit
+                        ? (<Grid item xs={12} className={classes.marginTop5}>
+                            <Alert severity="error">Something went wrong, please try again!</Alert>
+                        </Grid>)
+                        : (<></>)}
                     </Grid>
                 </DialogContent>
                 <DialogActions>
@@ -254,6 +296,7 @@ const TeamTab = (props) => {
                         {buttonType === 'Edit' ? 'Save' : 'Submit'}
                     </Button>
                 </DialogActions>
+                </>)}
             </Dialog>
 
             {/* Pending/Answered/Completed Clusters */}
@@ -261,7 +304,7 @@ const TeamTab = (props) => {
                 {/* Pending Cluster */}
                 <Grid item xs={12}><Typography variant="h5" component="h2">Pending</Typography></Grid>
                 { teamData.events.map((teamEvent,i) => (
-                    <Grid item xs={12} sm={6} key={i} >
+                    <Grid item xs={12} sm={4} key={i} >
                         <Card className={classes.eventCard} variant="outlined">
                             <CardContent>
                                 <Typography variant="h5" component="h2">
@@ -292,7 +335,7 @@ const TeamTab = (props) => {
                 {/* Answered Cluster */}
                 <Grid item xs={12}><Typography variant="h5" component="h2">Answered</Typography></Grid>
                 { teamData.events.map((teamEvent,i) => (
-                    <Grid item xs={12} sm={6} key={i} >
+                    <Grid item xs={12} sm={4} key={i} >
                         <Card className={classes.eventCard} variant="outlined">
                             <CardContent>
                                 <Typography variant="h5" component="h2">
@@ -323,7 +366,7 @@ const TeamTab = (props) => {
                 {/* Completed Cluster */}
                 <Grid item xs={12}><Typography variant="h5" component="h2">Completed</Typography></Grid>
                 { teamData.events.map((teamEvent,i) => (
-                    <Grid item xs={12} sm={6} key={i} >
+                    <Grid item xs={12} sm={4} key={i} >
                         <Card className={classes.eventCard} variant="outlined">
                             <CardContent>
                                 <Typography variant="h5" component="h2">
