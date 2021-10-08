@@ -69,6 +69,7 @@ const Home = (props) => {
     const [userData, setUserData] = useState({});
     const [teamsData, setTeamsData] = useState([]);
     const [renderTab, setRenderTab] = useState("Dashboard");
+    const [renderTeamData, setRenderTeamData] = useState({});
     
     const loadAccountPage = e => {
         setRenderTab("Account");
@@ -78,6 +79,11 @@ const Home = (props) => {
     }
     const selectTeamTab = e => {
         setRenderTab(e.target.innerHTML);
+        for (let team in teamsData) {
+            if (teamsData[team].teamName === e.target.innerHTML) {
+                setRenderTeamData(teamsData[team]);
+            }
+        }
     }
     const logoutHandler = e => {
 		localStorage.removeItem('AssembleAuthToken');
@@ -203,7 +209,7 @@ const Home = (props) => {
             ? <Account userData={userData} /> 
             : renderTab === "Dashboard"
                 ? <Dashboard userData={userData}/>
-                : <TeamTab userData={userData} teamName={renderTab} teamsData={teamsData}/>
+                : <TeamTab userData={userData} teamName={renderTab} renderTeamData={renderTeamData}/>
         }</div>
         
     </>

@@ -62,12 +62,13 @@ const styles = (theme) => ({
 });
 
 const TeamTab = (props) => {
-    const { classes, userData, teamName, teamsData } = props;
+    const { classes, userData, teamName, renderTeamData } = props;
     const [uiLoading, setUiLoading] = useState(true);
-    const [teamData, setTeamData] = useState({});
+    const [teamData, setTeamData] = useState(renderTeamData);
     const [openNew, setOpenNew] = useState(false);
     const [openView, setOpenView] = useState(false);
     const [buttonType, setButtonType] = useState('');
+    const [updateTeamDataTrigger, setUpdateTeamDataTrigger] = useState(false);
     // New Event Form States
     const [eventName, setEventName] = useState("");
     const [eventLocation, setEventLocation] = useState("");
@@ -112,13 +113,14 @@ const TeamTab = (props) => {
                 setOpenNew(false);
                 
                 // Update team data
-                getTeamDataByID(teamData.id)
-                    .then((res) => {
-                        if (res.teamDocument) setTeamData(res.teamDocument);
-                    })
-                    .catch(() => {
-                        window.alert("TeamTab.js: No Team ID match.");
-                    })
+                setUpdateTeamDataTrigger(true);
+                // getTeamDataByID(teamData.id)
+                //     .then((res) => {
+                //         if (res.teamDocument) setTeamData(res.teamDocument);
+                //     })
+                //     .catch(() => {
+                //         window.alert("TeamTab.js: No Team ID match.");
+                //     })
             })
             .catch(() => {
                 setErrors({...errors, submit: "error"})
@@ -152,16 +154,22 @@ const TeamTab = (props) => {
 
     useEffect(()=>{
         console.log("Showing TeamTab Component");
-        // console.log(userData);
-        // console.log(teamName);
-        // console.log(teamsData);
-        for (let team in teamsData) {
-            if (teamsData[team].teamName === teamName) {
-                setTeamData(teamsData[team]);
-            }
-        }
         setUiLoading(false);
-    }, [props, userData, teamName, teamsData, openNew]);
+    }, [props, userData, teamName]);
+    
+    useEffect(()=>{
+        if (updateTeamDataTrigger === true) {
+            getTeamDataByID(teamData.id)
+            .then((res) => {
+                if (res.teamDocument) setTeamData(res.teamDocument);
+            })
+            .catch(() => {
+                window.alert("TeamTab.js: No Team ID match.");
+            })
+            console.log("   one call");
+        }
+        setUpdateTeamDataTrigger(false);
+    }, [teamData, updateTeamDataTrigger]);
 
     return uiLoading === true
     ? (<>
@@ -303,96 +311,69 @@ const TeamTab = (props) => {
             <Grid className={classes.eventsGrid} container spacing={2}>
                 {/* Pending Cluster */}
                 <Grid item xs={12}><Typography variant="h5" component="h2">Pending</Typography></Grid>
-                { teamData.events.map((teamEvent,i) => (
-                    <Grid item xs={12} sm={4} key={i} >
-                        <Card className={classes.eventCard} variant="outlined">
-                            <CardContent>
-                                <Typography variant="h5" component="h2">
-                                    {teamEvent.eventName}
-                                </Typography>
-                                <Typography className={classes.pos} color="textSecondary">
-                                    Created {timestampToDate(teamEvent.createdAt)}
-                                </Typography>
-                                <Typography variant="body2" component="p">
-                                    at {teamEvent.location}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" color="primary" onClick={openViewHandler}>
-                                    View
-                                </Button>
-                                <Button size="small" color="primary" onClick={openEditHandler}>
-                                    Edit
-                                </Button>
-                                <Button size="small" color="primary" onClick={deleteEventHandler}>
-                                    Delete
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))}  {/* End Pending */}
-
-                {/* Answered Cluster */}
-                <Grid item xs={12}><Typography variant="h5" component="h2">Answered</Typography></Grid>
-                { teamData.events.map((teamEvent,i) => (
-                    <Grid item xs={12} sm={4} key={i} >
-                        <Card className={classes.eventCard} variant="outlined">
-                            <CardContent>
-                                <Typography variant="h5" component="h2">
-                                    {teamEvent.eventName}
-                                </Typography>
-                                <Typography className={classes.pos} color="textSecondary">
-                                    Created {timestampToDate(teamEvent.createdAt)}
-                                </Typography>
-                                <Typography variant="body2" component="p">
-                                    at {teamEvent.location}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" color="primary" onClick={openViewHandler}>
-                                    View
-                                </Button>
-                                <Button size="small" color="primary" onClick={openEditHandler}>
-                                    Edit
-                                </Button>
-                                <Button size="small" color="primary" onClick={deleteEventHandler}>
-                                    Delete
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))}  {/* End Answered */}
+                { teamData.events.map((teamEvent,i) => {
+                    if (teamEvent.status === "pending") {
+                        return (<Grid item xs={12} sm={4} key={i} >
+                            <Card className={classes.eventCard} variant="outlined">
+                                <CardContent>
+                                    <Typography variant="h5" component="h2">
+                                        {teamEvent.eventName}
+                                    </Typography>
+                                    <Typography className={classes.pos} color="textSecondary">
+                                        Created {timestampToDate(teamEvent.createdAt)}
+                                    </Typography>
+                                    <Typography variant="body2" component="p">
+                                        at {teamEvent.location}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small" color="primary" onClick={openViewHandler}>
+                                        View
+                                    </Button>
+                                    <Button size="small" color="primary" onClick={openEditHandler}>
+                                        Edit
+                                    </Button>
+                                    <Button size="small" color="primary" onClick={deleteEventHandler}>
+                                        Delete
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>)
+                    }
+                })}  {/* End Pending */}
 
                 {/* Completed Cluster */}
                 <Grid item xs={12}><Typography variant="h5" component="h2">Completed</Typography></Grid>
-                { teamData.events.map((teamEvent,i) => (
-                    <Grid item xs={12} sm={4} key={i} >
-                        <Card className={classes.eventCard} variant="outlined">
-                            <CardContent>
-                                <Typography variant="h5" component="h2">
-                                    {teamEvent.eventName}
-                                </Typography>
-                                <Typography className={classes.pos} color="textSecondary">
-                                    Created {timestampToDate(teamEvent.createdAt)}
-                                </Typography>
-                                <Typography variant="body2" component="p">
-                                    at {teamEvent.location}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small" color="primary" onClick={openViewHandler}>
-                                    View
-                                </Button>
-                                <Button size="small" color="primary" onClick={openEditHandler}>
-                                    Edit
-                                </Button>
-                                <Button size="small" color="primary" onClick={deleteEventHandler}>
-                                    Delete
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))}  {/* End Completed */}
+                { teamData.events.map((teamEvent,i) => {
+                    if (teamEvent.status === "completed") {
+                        return (<Grid item xs={12} sm={4} key={i} >
+                            <Card className={classes.eventCard} variant="outlined">
+                                <CardContent>
+                                    <Typography variant="h5" component="h2">
+                                        {teamEvent.eventName}
+                                    </Typography>
+                                    <Typography className={classes.pos} color="textSecondary">
+                                        Created {timestampToDate(teamEvent.createdAt)}
+                                    </Typography>
+                                    <Typography variant="body2" component="p">
+                                        at {teamEvent.location}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small" color="primary" onClick={openViewHandler}>
+                                        View
+                                    </Button>
+                                    <Button size="small" color="primary" onClick={openEditHandler}>
+                                        Edit
+                                    </Button>
+                                    <Button size="small" color="primary" onClick={deleteEventHandler}>
+                                        Delete
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>)
+                    }
+                })}  {/* End Completed */}
             </Grid>
 
             {/* New Event Button */}

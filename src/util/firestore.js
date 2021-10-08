@@ -35,6 +35,7 @@ const getTeamDataByID = async (teamId) => {
 }
 
 const createEvent = async (teamId, newEventData) => {
+    if (!teamId || !newEventData) return false;
     const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = newEventData;
     const teamDocRef = doc(db, "teams", teamId)
     let res = await updateDoc(teamDocRef, {
