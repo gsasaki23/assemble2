@@ -209,7 +209,7 @@ const Home = (props) => {
             ? <Account userData={userData} /> 
             : renderTab === "Dashboard"
                 ? <Dashboard userData={userData}/>
-                : <TeamTab userData={userData} teamName={renderTab} renderTeamData={renderTeamData}/>
+                : <TeamTab userData={userData} renderTeamData={renderTeamData}/>
         }</div>
         
     </>

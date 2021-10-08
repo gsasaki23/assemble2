@@ -62,7 +62,7 @@ const styles = (theme) => ({
 });
 
 const TeamTab = (props) => {
-    const { classes, userData, teamName, renderTeamData } = props;
+    const { classes, userData, renderTeamData } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [teamData, setTeamData] = useState(renderTeamData);
     const [openNew, setOpenNew] = useState(false);
@@ -153,9 +153,9 @@ const TeamTab = (props) => {
     }
 
     useEffect(()=>{
-        console.log("Showing TeamTab Component");
+        console.log(`Showing TeamTab Component`);
         setUiLoading(false);
-    }, [props, userData, teamName]);
+    }, [props, userData]);
     
     useEffect(()=>{
         if (updateTeamDataTrigger === true) {
@@ -180,7 +180,7 @@ const TeamTab = (props) => {
     : (<>
         <Container component="main">
             <CssBaseline />
-            <h1 className={classes.TeamTabTop}>{teamName}</h1>
+            <h1 className={classes.TeamTabTop}>{teamData.teamName}</h1>
 
             {/* New Event Popup */}
             <Dialog open={openNew} onClose={closeNewHandler}>
@@ -306,6 +306,12 @@ const TeamTab = (props) => {
                 </DialogActions>
                 </>)}
             </Dialog>
+
+            {/* View Event Popup */}
+            <Dialog open={openView} onClose={closeViewHandler}>
+
+            </Dialog>
+
 
             {/* Pending/Answered/Completed Clusters */}
             <Grid className={classes.eventsGrid} container spacing={2}>
