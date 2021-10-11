@@ -65,11 +65,11 @@ const TeamTab = (props) => {
     const { classes, userData, renderTeamData } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [teamData, setTeamData] = useState(renderTeamData);
-    const [openNew, setOpenNew] = useState(false);
     const [openView, setOpenView] = useState(false);
     const [buttonType, setButtonType] = useState('');
     const [updateTeamDataTrigger, setUpdateTeamDataTrigger] = useState(false);
     // New Event Form States
+    const [openNew, setOpenNew] = useState(false);
     const [eventName, setEventName] = useState("");
     const [eventLocation, setEventLocation] = useState("");
     const [eventStartDateTime, setEventStartDateTime] = useState(new Date());
@@ -112,15 +112,7 @@ const TeamTab = (props) => {
                 setEventNotes("");
                 setOpenNew(false);
                 
-                // Update team data
                 setUpdateTeamDataTrigger(true);
-                // getTeamDataByID(teamData.id)
-                //     .then((res) => {
-                //         if (res.teamDocument) setTeamData(res.teamDocument);
-                //     })
-                //     .catch(() => {
-                //         window.alert("TeamTab.js: No Team ID match.");
-                //     })
             })
             .catch(() => {
                 setErrors({...errors, submit: "error"})
@@ -155,9 +147,12 @@ const TeamTab = (props) => {
     useEffect(()=>{
         console.log(`Showing TeamTab Component`);
         setUiLoading(false);
-    }, [props, userData]);
+        setTeamData(renderTeamData);
+    }, [props, userData, renderTeamData]);
     
     useEffect(()=>{
+        console.log(teamData);
+        console.log(teamData.id);
         if (updateTeamDataTrigger === true) {
             getTeamDataByID(teamData.id)
             .then((res) => {

@@ -67,6 +67,7 @@ const Home = (props) => {
     const { classes } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [userData, setUserData] = useState({});
+    // const [teamsData, setTeamsData] = useState([]);
     const [teamsData, setTeamsData] = useState([]);
     const [renderTab, setRenderTab] = useState("Dashboard");
     const [renderTeamData, setRenderTeamData] = useState({});
@@ -78,10 +79,13 @@ const Home = (props) => {
         setRenderTab("Dashboard");
     }
     const selectTeamTab = e => {
-        setRenderTab(e.target.innerHTML);
+        // setRenderTab(e.target.innerHTML);
         for (let team in teamsData) {
             if (teamsData[team].teamName === e.target.innerHTML) {
+                setRenderTab(teamsData[team].teamName);
+                console.log("tab changed to: " + teamsData[team].teamName);
                 setRenderTeamData(teamsData[team]);
+                console.log("tab data updated");
             }
         }
     }
@@ -128,9 +132,9 @@ const Home = (props) => {
                                 }
                             })
                     })
-                    setUiLoading(false);
                 }
             })
+        setUiLoading(false);
     }, [props]);
 
     return uiLoading === true
