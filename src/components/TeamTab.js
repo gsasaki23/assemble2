@@ -68,8 +68,8 @@ const TeamTab = (props) => {
     const [openView, setOpenView] = useState(false);
     const [buttonType, setButtonType] = useState('');
     const [updateTeamDataTrigger, setUpdateTeamDataTrigger] = useState(false);
-    // New Event Form States
-    const [openNew, setOpenNew] = useState(false);
+    // New/Edit Event Form States
+    const [openNewEdit, setOpenNewEdit] = useState(false);
     const [eventName, setEventName] = useState("");
     const [eventLocation, setEventLocation] = useState("");
     const [eventStartDateTime, setEventStartDateTime] = useState(new Date());
@@ -88,13 +88,13 @@ const TeamTab = (props) => {
         Handlers for "Create New Event" Button
     */
     const openNewHandler = () => {
-        console.log("openNewHandler");
+        // console.log("openNewHandler");
         setButtonType('');
-        setOpenNew(true);
+        setOpenNewEdit(true);
 	};
     const submitHandler = e => {
         e.preventDefault();
-        console.log("submitHandler");
+        // console.log("submitHandler");
         if (errors.submit) {
             let newErrors = {...errors};
             delete newErrors.submit;
@@ -110,7 +110,7 @@ const TeamTab = (props) => {
                 setEventStartDateTime(new Date());
                 setEventEndDateTime(new Date());
                 setEventNotes("");
-                setOpenNew(false);
+                setOpenNewEdit(false);
                 
                 setUpdateTeamDataTrigger(true);
             })
@@ -120,7 +120,7 @@ const TeamTab = (props) => {
             })
     }
     const closeNewHandler = () => {
-        setOpenNew(false);
+        setOpenNewEdit(false);
 	};
 
     const openViewHandler = (data) => {
@@ -130,9 +130,16 @@ const TeamTab = (props) => {
 	};
     const openEditHandler = (data) => {
         console.log("openEditHandler");
-        // set event info from args
-        setButtonType('edit');
-        setOpenView(true);
+
+        // Set respective field into state
+        setEventName(data.eventName);
+        setEventLocation(data.location);
+        setEventStartDateTime(data.startEventTime);
+        setEventEndDateTime(data.endEventTime);
+        setEventNotes(data.notes);
+
+        setButtonType('Edit');
+        setOpenNewEdit(true);
 	};
     const closeViewHandler = () => {
         console.log("closeViewHandler");
@@ -151,8 +158,6 @@ const TeamTab = (props) => {
     }, [props, userData, renderTeamData]);
     
     useEffect(()=>{
-        console.log(teamData);
-        console.log(teamData.id);
         if (updateTeamDataTrigger === true) {
             getTeamDataByID(teamData.id)
             .then((res) => {
@@ -161,7 +166,6 @@ const TeamTab = (props) => {
             .catch(() => {
                 window.alert("TeamTab.js: No Team ID match.");
             })
-            console.log("   one call");
         }
         setUpdateTeamDataTrigger(false);
     }, [teamData, updateTeamDataTrigger]);
@@ -177,8 +181,8 @@ const TeamTab = (props) => {
             <CssBaseline />
             <h1 className={classes.TeamTabTop}>{teamData.teamName}</h1>
 
-            {/* New Event Popup */}
-            <Dialog open={openNew} onClose={closeNewHandler}>
+            {/* New/Edit Event Popup */}
+            <Dialog open={openNewEdit} onClose={closeNewHandler}>
                 {submitLoading === true
                 ? (<>
                     <div>
@@ -189,7 +193,9 @@ const TeamTab = (props) => {
                 <DialogTitle>{buttonType === 'Edit' ? 'Edit Event' : 'Create Event'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Assemble your team by creating a new event!
+                        {buttonType === 'Edit' 
+                            ? 'Edit your event details!'
+                            : 'Assemble your team by creating a new event!'}
                     </DialogContentText>
                     <Grid container spacing={2}>
                         <Grid item xs={12} className={classes.marginTop5}>
@@ -295,7 +301,7 @@ const TeamTab = (props) => {
                     <Button onClick={closeNewHandler}>
                         Cancel
                     </Button>
-                    <Button onClick={submitHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
+                    <Button onClick={buttonType === 'Edit' ? 'Save' : submitHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
                         {buttonType === 'Edit' ? 'Save' : 'Submit'}
                     </Button>
                 </DialogActions>
@@ -328,13 +334,13 @@ const TeamTab = (props) => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" color="primary" onClick={openViewHandler}>
+                                    <Button size="small" color="primary" onClick={()=>openViewHandler(teamEvent)}>
                                         View
                                     </Button>
-                                    <Button size="small" color="primary" onClick={openEditHandler}>
+                                    <Button size="small" color="primary" onClick={()=>openEditHandler(teamEvent)}>
                                         Edit
                                     </Button>
-                                    <Button size="small" color="primary" onClick={deleteEventHandler}>
+                                    <Button size="small" color="primary" onClick={()=>deleteEventHandler(teamEvent)}>
                                         Delete
                                     </Button>
                                 </CardActions>
@@ -361,13 +367,13 @@ const TeamTab = (props) => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" color="primary" onClick={openViewHandler}>
+                                    <Button size="small" color="primary" onClick={()=>openViewHandler(teamEvent)}>
                                         View
                                     </Button>
-                                    <Button size="small" color="primary" onClick={openEditHandler}>
+                                    <Button size="small" color="primary" onClick={()=>openEditHandler(teamEvent)}>
                                         Edit
                                     </Button>
-                                    <Button size="small" color="primary" onClick={deleteEventHandler}>
+                                    <Button size="small" color="primary" onClick={()=>deleteEventHandler(teamEvent)}>
                                         Delete
                                     </Button>
                                 </CardActions>
