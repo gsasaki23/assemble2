@@ -128,15 +128,16 @@ const TeamTab = (props) => {
         // set event info from args
         setOpenView(true);
 	};
-    const openEditHandler = (data) => {
+    const openEditHandler = e => {
         console.log("openEditHandler");
+        console.log(e.target.id);
 
         // Set respective field into state
-        setEventName(data.eventName);
-        setEventLocation(data.location);
-        setEventStartDateTime(data.startEventTime);
-        setEventEndDateTime(data.endEventTime);
-        setEventNotes(data.notes);
+        // setEventName(data.eventName);
+        // setEventLocation(data.location);
+        // setEventStartDateTime(data.startEventTime);
+        // setEventEndDateTime(data.endEventTime);
+        // setEventNotes(data.notes);
 
         setButtonType('Edit');
         setOpenNewEdit(true);
@@ -334,13 +335,13 @@ const TeamTab = (props) => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" color="primary" onClick={()=>openViewHandler(teamEvent)}>
+                                    <Button size="small" color="primary" id={`${teamEvent.eventId}-view`} onClick={openViewHandler}>
                                         View
                                     </Button>
-                                    <Button size="small" color="primary" onClick={()=>openEditHandler(teamEvent)}>
+                                    <Button size="small" color="primary" id={`${teamEvent.eventId}-edit`} onClick={openEditHandler}>
                                         Edit
                                     </Button>
-                                    <Button size="small" color="primary" onClick={()=>deleteEventHandler(teamEvent)}>
+                                    <Button size="small" color="primary" id={`${teamEvent.eventId}-delete`} onClick={deleteEventHandler}>
                                         Delete
                                     </Button>
                                 </CardActions>
@@ -367,13 +368,13 @@ const TeamTab = (props) => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" color="primary" onClick={()=>openViewHandler(teamEvent)}>
+                                    <Button size="small" color="primary" id={`${teamEvent.eventId}-view`} onClick={openViewHandler}>
                                         View
                                     </Button>
-                                    <Button size="small" color="primary" onClick={()=>openEditHandler(teamEvent)}>
+                                    <Button size="small" color="primary" id={`${teamEvent.eventId}-edit`} onClick={openEditHandler}>
                                         Edit
                                     </Button>
-                                    <Button size="small" color="primary" onClick={()=>deleteEventHandler(teamEvent)}>
+                                    <Button size="small" color="primary" id={`${teamEvent.eventId}-delete`}onClick={deleteEventHandler}>
                                         Delete
                                     </Button>
                                 </CardActions>
