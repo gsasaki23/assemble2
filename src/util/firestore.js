@@ -55,6 +55,15 @@ const createEvent = async (teamId, newEventData) => {
     return res;
 }
 
+const updateEvent = async (teamId, updatedEventData) => {
+    if (!teamId || !updatedEventData) return false;
+    const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
+    const teamDocRef = doc(db, "teams", teamId)
+    // retrieve team document/event
+    // update any changed fields from TeamTab editHandler
+    return res;
+}
+
 export {
     db, query, where, getDocs, addDoc, Timestamp,
     usersRef, checkUIDExists, createUser, 
