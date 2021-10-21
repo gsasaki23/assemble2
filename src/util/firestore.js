@@ -58,14 +58,16 @@ const createEvent = async (teamId, newEventData) => {
 const updateEvent = async (teamId, updatedEventData) => {
     if (!teamId || !updatedEventData) return false;
     const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
-    const teamDocRef = doc(db, "teams", teamId)
-    // retrieve team document/event
+    const teamDocSnapshot = await getDoc(doc(db, "teams", teamId));
+    let events = teamDocSnapshot.data();
+    console.log(events);
+
     // update any changed fields from TeamTab editHandler
-    return res;
+    return;
 }
 
 export {
     db, query, where, getDocs, addDoc, Timestamp,
     usersRef, checkUIDExists, createUser, 
-    teamsRef, getTeamDataByID, createEvent
+    teamsRef, getTeamDataByID, createEvent, updateEvent
 }

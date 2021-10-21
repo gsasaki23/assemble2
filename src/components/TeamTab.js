@@ -1,6 +1,6 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
-import { Timestamp, createEvent, getTeamDataByID } from '../util/firestore';
+import { Timestamp, createEvent, updateEvent, getTeamDataByID } from '../util/firestore';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -144,6 +144,34 @@ const TeamTab = (props) => {
         setButtonType('Edit');
         setOpenNewEdit(true);
 	};
+    const editHandler = e => {
+        e.preventDefault();
+        // console.log("editHandler");
+        if (errors.submit) {
+            let newErrors = {...errors};
+            delete newErrors.submit;
+            setErrors(newErrors);
+        } 
+        setSubmitLoading(true);
+        
+        updateEvent(teamData.id, {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes})
+            .then(() => {
+                // Alert?
+                setSubmitLoading(false);
+                setEventName("");
+                setEventLocation("");
+                setEventStartDateTime(new Date());
+                setEventEndDateTime(new Date());
+                setEventNotes("");
+                setOpenNewEdit(false);
+                
+                setUpdateTeamDataTrigger(true);
+            })
+            .catch(() => {
+                setErrors({...errors, submit: "error"})
+                setSubmitLoading(false);
+            })
+    }
     const closeViewHandler = () => {
         console.log("closeViewHandler");
         setOpenView(false);
@@ -311,7 +339,7 @@ const TeamTab = (props) => {
                     <Button onClick={closeNewHandler}>
                         Cancel
                     </Button>
-                    <Button onClick={buttonType === 'Edit' ? 'Save' : submitHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
+                    <Button onClick={buttonType === 'Edit' ? editHandler : submitHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
                         {buttonType === 'Edit' ? 'Save' : 'Submit'}
                     </Button>
                 </DialogActions>
