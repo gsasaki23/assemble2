@@ -57,7 +57,7 @@ const createEvent = async (teamId, newEventData) => {
 
 const updateEvent = async (teamId, updatedEventData) => {
     if (!teamId || !updatedEventData) return false;
-    const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
+    // const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
     const teamDocSnapshot = await getDoc(doc(db, "teams", teamId));
     let events = teamDocSnapshot.data();
     console.log(events);
