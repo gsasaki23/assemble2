@@ -132,14 +132,25 @@ const TeamTab = (props) => {
 	};
     const openEditHandler = e => {
         console.log("openEditHandler");
-        console.log(e.target.id);
+
+        // Find matching event ID
+        let eventIdToEdit = parseInt(e.target.id.replaceAll("-edit",""));
+        let eventToEdit = {};
+        for (const event of teamData.events) {
+            if (event.eventId === eventIdToEdit) {
+                eventToEdit = event;
+                break;
+            } 
+        }
+        // TODO: Error handling
+        if (eventToEdit === {}) return;
 
         // Set respective field into state
-        // setEventName(data.eventName);
-        // setEventLocation(data.location);
-        // setEventStartDateTime(data.startEventTime);
-        // setEventEndDateTime(data.endEventTime);
-        // setEventNotes(data.notes);
+        setEventName(eventToEdit.eventName);
+        setEventLocation(eventToEdit.location);
+        setEventStartDateTime(eventToEdit.startEventTime); // TODO: DEBUG
+        setEventEndDateTime(eventToEdit.endEventTime); // TODO: DEBUG
+        setEventNotes(eventToEdit.notes);
 
         setButtonType('Edit');
         setOpenNewEdit(true);
