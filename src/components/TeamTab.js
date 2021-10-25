@@ -148,14 +148,8 @@ const TeamTab = (props) => {
         // Set respective field into state
         setEventName(eventToEdit.eventName);
         setEventLocation(eventToEdit.location);
-
-        console.log("10/25 Debug");
-        console.log(eventToEdit.startEventTime);
-        console.log(typeof eventToEdit.startEventTime);
-        setEventStartDateTime(eventToEdit.startEventTime); // TODO: DEBUG
-        console.log(eventToEdit.endEventTime);
-        console.log(typeof eventToEdit.endEventTime);
-        setEventEndDateTime(eventToEdit.endEventTime); // TODO: DEBUG
+        setEventStartDateTime(timestampToDate(eventToEdit.startDateTime));
+        setEventEndDateTime(timestampToDate(eventToEdit.endDateTime));
         setEventNotes(eventToEdit.notes);
 
         setButtonType('Edit');
@@ -195,6 +189,10 @@ const TeamTab = (props) => {
 	};
 
     const timestampToDate = (timestamp) => {
+        let ts = new Timestamp(timestamp.seconds, timestamp.nanoseconds);
+        return ts.toDate();
+    }
+    const timestampToDateDiff = (timestamp) => {
         let ts = new Timestamp(timestamp.seconds, timestamp.nanoseconds);
         return dayjs(ts.toDate()).fromNow();
     }
@@ -381,7 +379,7 @@ const TeamTab = (props) => {
                                     {teamEvent.eventName}
                                 </Typography>
                                 <Typography className={classes.pos} color="textSecondary">
-                                    Created {timestampToDate(teamEvent.createdAt)}
+                                    Created {timestampToDateDiff(teamEvent.createdAt)}
                                 </Typography>
                                 <Typography variant="body2" component="p">
                                     at {teamEvent.location}
@@ -412,7 +410,7 @@ const TeamTab = (props) => {
                                     {teamEvent.eventName}
                                 </Typography>
                                 <Typography className={classes.pos} color="textSecondary">
-                                    Created {timestampToDate(teamEvent.createdAt)}
+                                    Created {timestampToDateDiff(teamEvent.createdAt)}
                                 </Typography>
                                 <Typography variant="body2" component="p">
                                     at {teamEvent.location}
