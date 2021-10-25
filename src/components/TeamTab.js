@@ -148,7 +148,13 @@ const TeamTab = (props) => {
         // Set respective field into state
         setEventName(eventToEdit.eventName);
         setEventLocation(eventToEdit.location);
+
+        console.log("10/25 Debug");
+        console.log(eventToEdit.startEventTime);
+        console.log(typeof eventToEdit.startEventTime);
         setEventStartDateTime(eventToEdit.startEventTime); // TODO: DEBUG
+        console.log(eventToEdit.endEventTime);
+        console.log(typeof eventToEdit.endEventTime);
         setEventEndDateTime(eventToEdit.endEventTime); // TODO: DEBUG
         setEventNotes(eventToEdit.notes);
 
