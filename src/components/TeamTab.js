@@ -72,6 +72,7 @@ const TeamTab = (props) => {
     const [updateTeamDataTrigger, setUpdateTeamDataTrigger] = useState(false);
     // New/Edit Event Form States
     const [openNewEdit, setOpenNewEdit] = useState(false);
+    const [eventId, setEventId] = useState("");
     const [eventName, setEventName] = useState("");
     const [eventLocation, setEventLocation] = useState("");
     const [eventStartDateTime, setEventStartDateTime] = useState(new Date());
@@ -146,6 +147,7 @@ const TeamTab = (props) => {
         if (eventToEdit === {}) return;
 
         // Set respective field into state
+        setEventId(eventToEdit.eventId);
         setEventName(eventToEdit.eventName);
         setEventLocation(eventToEdit.location);
         setEventStartDateTime(timestampToDate(eventToEdit.startDateTime));
@@ -165,10 +167,12 @@ const TeamTab = (props) => {
         } 
         setSubmitLoading(true);
         
-        updateEvent(teamData.id, {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes})
+        // Update Call
+        updateEvent(teamData.id, {eventId, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes})
             .then(() => {
                 // Alert?
                 setSubmitLoading(false);
+                setEventId("");
                 setEventName("");
                 setEventLocation("");
                 setEventStartDateTime(new Date());

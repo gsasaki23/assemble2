@@ -37,8 +37,7 @@ const getTeamDataByID = async (teamId) => {
 const createEvent = async (teamId, newEventData) => {
     if (!teamId || !newEventData) return false;
     const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = newEventData;
-    const teamDocRef = doc(db, "teams", teamId)
-    let res = await updateDoc(teamDocRef, {
+    let res = await updateDoc(doc(db, "teams", teamId), {
         events: arrayUnion({
             eventId: 1,
             eventName, 
@@ -57,13 +56,25 @@ const createEvent = async (teamId, newEventData) => {
 
 const updateEvent = async (teamId, updatedEventData) => {
     if (!teamId || !updatedEventData) return false;
-    // const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
-    const teamDocSnapshot = await getDoc(doc(db, "teams", teamId));
-    let events = teamDocSnapshot.data();
-    console.log(events);
+    const teamDocRef = doc(db, "teams", teamId)
+    const teamDocSnapshot = await getDoc(teamDocRef);
+    let events = teamDocSnapshot.data().events;
+    
+    // Update matching eventId
+    const {eventId, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
+    for (const event of events) {
+        if (event.eventId === eventId) {
+            event.eventName = eventName;
+            event.eventLocation = eventLocation;
+            event.eventStartDateTime = eventStartDateTime;
+            event.eventEndDateTime = eventEndDateTime;
+            event.eventNotes = eventNotes;
+        }
+    }
 
-    // update any changed fields from TeamTab editHandler
-    return;
+    // Update Call
+    let res = await updateDoc(teamDocRef, { events })
+    return res;
 }
 
 export {
