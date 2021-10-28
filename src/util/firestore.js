@@ -31,7 +31,9 @@ const createUser = async (newUserData) => {
 
 const getTeamDataByID = async (teamId) => {
     const teamDocSnapshot = await getDoc(doc(db, "teams", teamId));
-    return {result: true, teamDocument: teamDocSnapshot.data()};
+    let teamDocument = teamDocSnapshot.data();
+    teamDocument.id = teamId;
+    return { result: true, teamDocument };
 }
 
 const createEvent = async (teamId, newEventData) => {
@@ -65,10 +67,10 @@ const updateEvent = async (teamId, updatedEventData) => {
     for (const event of events) {
         if (event.eventId === eventId) {
             event.eventName = eventName;
-            event.eventLocation = eventLocation;
-            event.eventStartDateTime = eventStartDateTime;
-            event.eventEndDateTime = eventEndDateTime;
-            event.eventNotes = eventNotes;
+            event.location = eventLocation;
+            event.startDateTime = eventStartDateTime;
+            event.endDateTime = eventEndDateTime;
+            event.notes = eventNotes;
         }
     }
 

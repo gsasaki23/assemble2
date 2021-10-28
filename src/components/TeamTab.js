@@ -68,8 +68,8 @@ const TeamTab = (props) => {
     const [pendingEvents, setPendingEvents] = useState(renderTeamData.events.filter(teamEvent => teamEvent.status === "pending"));
     const [completedEvents, setCompletedEvents] = useState(renderTeamData.events.filter(teamEvent => teamEvent.status === "completed"));
     const [openView, setOpenView] = useState(false);
-    const [buttonType, setButtonType] = useState('');
     const [updateTeamDataTrigger, setUpdateTeamDataTrigger] = useState(false);
+    const [buttonType, setButtonType] = useState('');
     // New/Edit Event Form States
     const [openNewEdit, setOpenNewEdit] = useState(false);
     const [eventId, setEventId] = useState("");
@@ -93,6 +93,12 @@ const TeamTab = (props) => {
     const openNewHandler = () => {
         // console.log("openNewHandler");
         setButtonType('');
+        setEventId("");
+        setEventName("");
+        setEventLocation("");
+        setEventStartDateTime(new Date());
+        setEventEndDateTime(new Date());
+        setEventNotes("");
         setOpenNewEdit(true);
 	};
     const submitHandler = e => {
@@ -114,8 +120,8 @@ const TeamTab = (props) => {
                 setEventEndDateTime(new Date());
                 setEventNotes("");
                 setOpenNewEdit(false);
-                
                 setUpdateTeamDataTrigger(true);
+                
             })
             .catch(() => {
                 setErrors({...errors, submit: "error"})
@@ -172,15 +178,9 @@ const TeamTab = (props) => {
             .then(() => {
                 // Alert?
                 setSubmitLoading(false);
-                setEventId("");
-                setEventName("");
-                setEventLocation("");
-                setEventStartDateTime(new Date());
-                setEventEndDateTime(new Date());
-                setEventNotes("");
                 setOpenNewEdit(false);
-                
                 setUpdateTeamDataTrigger(true);
+                
             })
             .catch(() => {
                 setErrors({...errors, submit: "error"})
@@ -215,6 +215,7 @@ const TeamTab = (props) => {
             getTeamDataByID(teamData.id)
             .then((res) => {
                 if (res.teamDocument) {
+                    // console.log(res.teamDocument);
                     setTeamData(res.teamDocument);
                     setPendingEvents(res.teamDocument.events.filter(teamEvent => teamEvent.status === "pending"));
                     setCompletedEvents(res.teamDocument.events.filter(teamEvent => teamEvent.status === "completed"));
@@ -223,9 +224,10 @@ const TeamTab = (props) => {
             .catch(() => {
                 window.alert("TeamTab.js: No Team ID match.");
             })
+            setUpdateTeamDataTrigger(false);
         }
-        setUpdateTeamDataTrigger(false);
-    }, [teamData, updateTeamDataTrigger]);
+        // eslint-disable-next-line
+    }, [ updateTeamDataTrigger ]);
 
     return uiLoading === true
     ? (<>
