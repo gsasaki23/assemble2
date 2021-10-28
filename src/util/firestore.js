@@ -71,6 +71,7 @@ const updateEvent = async (teamId, updatedEventData) => {
             event.startDateTime = eventStartDateTime;
             event.endDateTime = eventEndDateTime;
             event.notes = eventNotes;
+            break;
         }
     }
 

@@ -82,16 +82,10 @@ const TeamTab = (props) => {
     const [submitLoading, setSubmitLoading] = useState(false);
     dayjs.extend(relativeTime);
 
-    const deleteEventHandler = e => {
-        console.log(e);
-        // firestore api call for deleting event
-	};
-
     /*
         Handlers for "Create New Event" Button
     */
     const openNewHandler = () => {
-        // console.log("openNewHandler");
         setButtonType('');
         setEventId("");
         setEventName("");
@@ -101,9 +95,8 @@ const TeamTab = (props) => {
         setEventNotes("");
         setOpenNewEdit(true);
 	};
-    const submitHandler = e => {
+    const createNewHandler = e => {
         e.preventDefault();
-        // console.log("submitHandler");
         if (errors.submit) {
             let newErrors = {...errors};
             delete newErrors.submit;
@@ -128,17 +121,15 @@ const TeamTab = (props) => {
                 setSubmitLoading(false);
             })
     }
-    const closeNewHandler = () => {
+    const closeNewEditHandler = () => {
         setOpenNewEdit(false);
 	};
 
-    const openViewHandler = (data) => {
-        console.log("openViewHandler");
-        // set event info from args
-        setOpenView(true);
-	};
+    /*
+        Handlers for Event "EDIT" Button
+    */
     const openEditHandler = e => {
-        console.log("openEditHandler");
+        e.preventDefault();
 
         // Find matching event ID
         let eventIdToEdit = parseInt(e.target.id.replaceAll("-edit",""));
@@ -162,10 +153,11 @@ const TeamTab = (props) => {
 
         setButtonType('Edit');
         setOpenNewEdit(true);
-	};
+    };
     const editHandler = e => {
         e.preventDefault();
-        // console.log("editHandler");
+
+        // Error Handling
         if (errors.submit) {
             let newErrors = {...errors};
             delete newErrors.submit;
@@ -187,11 +179,30 @@ const TeamTab = (props) => {
                 setSubmitLoading(false);
             })
     }
+    // Handler for CANCEL is above.
+
+    /*
+        Handlers for Event "VIEW" Button
+    */
+    const openViewHandler = (data) => {
+        console.log("openViewHandler");
+        // set event info from args
+        setOpenView(true);
+	};
     const closeViewHandler = () => {
         console.log("closeViewHandler");
         setOpenView(false);
 	};
+    
+    /*
+        Handlers for Event "DELETE" Button
+    */
+    const deleteEventHandler = e => {
+        console.log(e);
+        // firestore api call for deleting event
+	};
 
+    // Helpers
     const timestampToDate = (timestamp) => {
         let ts = new Timestamp(timestamp.seconds, timestamp.nanoseconds);
         return ts.toDate();
@@ -241,7 +252,7 @@ const TeamTab = (props) => {
             <h1 className={classes.TeamTabTop}>{teamData.teamName}</h1>
 
             {/* New/Edit Event Popup */}
-            <Dialog open={openNewEdit} onClose={closeNewHandler}>
+            <Dialog open={openNewEdit} onClose={closeNewEditHandler}>
                 {submitLoading === true
                 ? (<>
                     <div>
@@ -357,10 +368,10 @@ const TeamTab = (props) => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeNewHandler}>
+                    <Button onClick={closeNewEditHandler}>
                         Cancel
                     </Button>
-                    <Button onClick={buttonType === 'Edit' ? editHandler : submitHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
+                    <Button onClick={buttonType === 'Edit' ? editHandler : createNewHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
                         {buttonType === 'Edit' ? 'Save' : 'Submit'}
                     </Button>
                 </DialogActions>
