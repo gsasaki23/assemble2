@@ -1,6 +1,6 @@
 // Utility Imports
 import { useEffect, useState } from 'react';
-import { Timestamp, createEvent, updateEvent, getTeamDataByID } from '../util/firestore';
+import { Timestamp, createEvent, updateEvent, deleteEvent, getTeamDataByID } from '../util/firestore';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -193,13 +193,38 @@ const TeamTab = (props) => {
         console.log("closeViewHandler");
         setOpenView(false);
 	};
-    
+
     /*
         Handlers for Event "DELETE" Button
     */
     const deleteEventHandler = e => {
-        console.log(e);
-        // firestore api call for deleting event
+        e.preventDefault();
+
+        // Find matching event ID
+        let eventIdToEdit = parseInt(e.target.id.replaceAll("-edit",""));
+        let eventToEdit = {};
+        for (const event of teamData.events) {
+            if (event.eventId === eventIdToEdit) {
+                eventToEdit = event;
+                break;
+            } 
+        }
+        // TODO: Error handling
+        if (eventToEdit === {}) return;
+
+        // Delete Call
+        deleteEvent(teamData.id, eventToEdit.eventId)
+            .then(() => {
+                // Alert?
+                setSubmitLoading(false);
+                // setOpenNewEdit(false);                           Replace with new state
+                setUpdateTeamDataTrigger(true);
+            })
+            .catch(() => {
+                setErrors({...errors, submit: "error"})
+                setSubmitLoading(false);
+            })
+
 	};
 
     // Helpers

@@ -80,8 +80,20 @@ const updateEvent = async (teamId, updatedEventData) => {
     return res;
 }
 
+const deleteEvent = async (teamId, eventIdToDelete) => {
+    if (!teamId || !eventId) return false;
+    const teamDocRef = doc(db, "teams", teamId)
+    const teamDocSnapshot = await getDoc(teamDocRef);
+    let events = teamDocSnapshot.data().events;
+    events = events.filter(event => event.eventId !== eventIdToDelete);
+
+    // Update Call
+    let res = await updateDoc(teamDocRef, { events })
+    return res;
+}
+
 export {
     db, query, where, getDocs, addDoc, Timestamp,
     usersRef, checkUIDExists, createUser, 
-    teamsRef, getTeamDataByID, createEvent, updateEvent
+    teamsRef, getTeamDataByID, createEvent, updateEvent, deleteEvent
 }
