@@ -81,7 +81,7 @@ const updateEvent = async (teamId, updatedEventData) => {
 }
 
 const deleteEvent = async (teamId, eventIdToDelete) => {
-    if (!teamId || !eventId) return false;
+    if (!teamId || !eventIdToDelete) return false;
     const teamDocRef = doc(db, "teams", teamId)
     const teamDocSnapshot = await getDoc(teamDocRef);
     let events = teamDocSnapshot.data().events;
