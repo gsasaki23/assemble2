@@ -68,6 +68,7 @@ const TeamTab = (props) => {
     const [pendingEvents, setPendingEvents] = useState(renderTeamData.events.filter(teamEvent => teamEvent.status === "pending"));
     const [completedEvents, setCompletedEvents] = useState(renderTeamData.events.filter(teamEvent => teamEvent.status === "completed"));
     const [openView, setOpenView] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
     const [updateTeamDataTrigger, setUpdateTeamDataTrigger] = useState(false);
     const [buttonType, setButtonType] = useState('');
     // New/Edit Event Form States
@@ -197,35 +198,53 @@ const TeamTab = (props) => {
     /*
         Handlers for Event "DELETE" Button
     */
-    const deleteEventHandler = e => {
+    const openDeleteHandler = e => {
         e.preventDefault();
 
         // Find matching event ID
-        let eventIdToEdit = parseInt(e.target.id.replaceAll("-edit",""));
-        let eventToEdit = {};
+        let eventIdToDelete = parseInt(e.target.id.replaceAll("-delete",""));
+        let eventToDelete = {};
         for (const event of teamData.events) {
-            if (event.eventId === eventIdToEdit) {
-                eventToEdit = event;
+            if (event.eventId === eventIdToDelete) {
+                eventToDelete = event;
                 break;
             } 
         }
         // TODO: Error handling
-        if (eventToEdit === {}) return;
+        if (eventToDelete === {}) return;
+
+        // Set respective field into state
+        setEventId(eventToDelete.eventId);
+        setEventName(eventToDelete.eventName);
+
+        setButtonType('Delete');
+        setOpenDelete(true);    
+    };
+    const deleteEventHandler = e => {
+        e.preventDefault();
 
         // Delete Call
-        deleteEvent(teamData.id, eventToEdit.eventId)
-            .then(() => {
-                // Alert?
-                setSubmitLoading(false);
-                // setOpenNewEdit(false);                           Replace with new state
-                setUpdateTeamDataTrigger(true);
-            })
-            .catch(() => {
-                setErrors({...errors, submit: "error"})
-                setSubmitLoading(false);
-            })
+        // deleteEvent(teamData.id, eventToEdit.eventId)
+        //     .then(() => {
+        //         // Alert?
+        //         setSubmitLoading(false);
+        //         // setOpenNewEdit(false);                           Replace with new state
+        //         setUpdateTeamDataTrigger(true);
+        //     })
+        //     .catch(() => {
+        //         setErrors({...errors, submit: "error"})
+        //         setSubmitLoading(false);
+        //     })
 
+        console.log("delete called");
+        
+        setSubmitLoading(false);
+        setOpenDelete(false);
+        // setUpdateTeamDataTrigger(true);
 	};
+    const closeDeleteHandler = () => {
+        setOpenDelete(false);
+    }
 
     // Helpers
     const timestampToDate = (timestamp) => {
@@ -407,6 +426,47 @@ const TeamTab = (props) => {
             <Dialog open={openView} onClose={closeViewHandler}>
 
             </Dialog>
+            
+            {/* Delete Event Popup */}
+            <Dialog open={openDelete} onClose={closeDeleteHandler}>
+                {submitLoading === true
+                ? (<>
+                    <div>
+                        {submitLoading && <CircularProgress size={125} className={classes.uiProgess} />}
+                    </div>
+                </>)
+                : (<>
+                <DialogTitle>{'Delete Event'}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {'Delete this event?'}
+                    </DialogContentText>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} className={classes.marginTop5}>
+                            <TextField 
+                                id="eventName" 
+                                name="eventName" 
+                                variant="outlined" 
+                                fullWidth 
+                                required
+                                label="Event Name" 
+                                defaultValue={eventName}
+                                helperText={errors.eventName} 
+                                error={errors.eventName ? true : false}
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDeleteHandler}>
+                        Cancel
+                    </Button>
+                    <Button onClick={deleteEventHandler}>
+                        {'Delete'}
+                    </Button>
+                </DialogActions>
+                </>)}
+            </Dialog>
 
 
             {/* Pending/Completed Clusters */}
@@ -434,7 +494,7 @@ const TeamTab = (props) => {
                                 <Button size="small" color="primary" id={`${teamEvent.eventId}-edit`} onClick={openEditHandler}>
                                     Edit
                                 </Button>
-                                <Button size="small" color="primary" id={`${teamEvent.eventId}-delete`} onClick={deleteEventHandler}>
+                                <Button size="small" color="primary" id={`${teamEvent.eventId}-delete`} onClick={openDeleteHandler}>
                                     Delete
                                 </Button>
                             </CardActions>
@@ -465,7 +525,7 @@ const TeamTab = (props) => {
                                 <Button size="small" color="primary" id={`${teamEvent.eventId}-edit`} onClick={openEditHandler}>
                                     Edit
                                 </Button>
-                                <Button size="small" color="primary" id={`${teamEvent.eventId}-delete`}onClick={deleteEventHandler}>
+                                <Button size="small" color="primary" id={`${teamEvent.eventId}-delete`}onClick={openDeleteHandler}>
                                     Delete
                                 </Button>
                             </CardActions>
