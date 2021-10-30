@@ -39,9 +39,12 @@ const getTeamDataByID = async (teamId) => {
 const createEvent = async (teamId, newEventData) => {
     if (!teamId || !newEventData) return false;
     const {eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = newEventData;
-    let res = await updateDoc(doc(db, "teams", teamId), {
+    let nextEventIdRef = await getDoc(doc(db, "config", "nextEventId"));
+    let nextEventId = nextEventIdRef.data().eventId;
+
+    await updateDoc(doc(db, "teams", teamId), {
         events: arrayUnion({
-            eventId: 1,
+            eventId: nextEventId,
             eventName, 
             location: eventLocation,
             startDateTime: Timestamp.fromDate(eventStartDateTime),
@@ -53,7 +56,14 @@ const createEvent = async (teamId, newEventData) => {
             createdAt: Timestamp.fromDate(new Date()),
         })
     })
-    return res;
+
+    nextEventId++;
+    await updateDoc(doc(db, "config", "nextEventId"), {
+        eventId: nextEventId
+    })
+    .catch(err=>console.log(err))
+
+    return;
 }
 
 const updateEvent = async (teamId, updatedEventData) => {
