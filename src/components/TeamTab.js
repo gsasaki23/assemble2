@@ -28,8 +28,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import Alert from '@mui/material/Alert';
 
-
-
 const styles = (theme) => ({
     TeamTabTop:{
         margin: "10% 0% 0% 15%",
@@ -58,6 +56,9 @@ const styles = (theme) => ({
     },
     marginTop5: {
         marginTop: "5%"
+    },
+    center: {
+        textAlign: "center"
     }
 });
 
@@ -224,23 +225,17 @@ const TeamTab = (props) => {
         e.preventDefault();
 
         // Delete Call
-        // deleteEvent(teamData.id, eventToEdit.eventId)
-        //     .then(() => {
-        //         // Alert?
-        //         setSubmitLoading(false);
-        //         // setOpenNewEdit(false);                           Replace with new state
-        //         setUpdateTeamDataTrigger(true);
-        //     })
-        //     .catch(() => {
-        //         setErrors({...errors, submit: "error"})
-        //         setSubmitLoading(false);
-        //     })
-
-        console.log("delete called");
-        
-        setSubmitLoading(false);
-        setOpenDelete(false);
-        // setUpdateTeamDataTrigger(true);
+        deleteEvent(teamData.id, eventId)
+            .then(() => {
+                // Alert?
+                setSubmitLoading(false);
+                setOpenDelete(false);
+                setUpdateTeamDataTrigger(true);
+            })
+            .catch(() => {
+                setErrors({...errors, submit: "error"})
+                setSubmitLoading(false);
+            })
 	};
     const closeDeleteHandler = () => {
         setOpenDelete(false);
@@ -256,6 +251,7 @@ const TeamTab = (props) => {
         return dayjs(ts.toDate()).fromNow();
     }
 
+    // TeamTab Updated
     useEffect(()=>{
         console.log(`Showing TeamTab Component`);
         setUiLoading(false);
@@ -265,6 +261,7 @@ const TeamTab = (props) => {
 
     }, [props, userData, renderTeamData]);
     
+    // TeamData Updated
     useEffect(()=>{
         if (updateTeamDataTrigger === true) {
             getTeamDataByID(teamData.id)
@@ -436,33 +433,18 @@ const TeamTab = (props) => {
                     </div>
                 </>)
                 : (<>
-                <DialogTitle>{'Delete Event'}</DialogTitle>
-                <DialogContent>
+                <DialogTitle>Delete Event</DialogTitle>
+                <DialogContent className={classes.center} >
                     <DialogContentText>
-                        {'Delete this event?'}
+                        Are you sure? This can't be undone!
                     </DialogContentText>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} className={classes.marginTop5}>
-                            <TextField 
-                                id="eventName" 
-                                name="eventName" 
-                                variant="outlined" 
-                                fullWidth 
-                                required
-                                label="Event Name" 
-                                defaultValue={eventName}
-                                helperText={errors.eventName} 
-                                error={errors.eventName ? true : false}
-                            />
-                        </Grid>
-                    </Grid>
+                        <Button variant="contained" color="error" onClick={deleteEventHandler} >
+                            Delete "{eventName}"!
+                        </Button>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDeleteHandler}>
                         Cancel
-                    </Button>
-                    <Button onClick={deleteEventHandler}>
-                        {'Delete'}
                     </Button>
                 </DialogActions>
                 </>)}
