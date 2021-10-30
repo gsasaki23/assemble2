@@ -9,12 +9,12 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
+import Typography from '@mui/material/Typography';
 
 const styles = (theme) => ({
     accountTop:{
-        margin: "10% 0% 0% 15%",
         textAlign: "center",
-        border: "2px solid black",
+        textDecoration: "underline",
     },
     form:{
         margin: "5% 0% 0% 15%",
@@ -87,7 +87,8 @@ const Account = (props) => {
     : (<>
         <Container component="main">
             <CssBaseline />
-            <h1 className={classes.accountTop}>Account Settings</h1>
+            <Typography variant="h3" mt={"7%"} className={classes.accountTop}>Account Settings</Typography>
+
 
             <form className={classes.form} noValidate>
                 <Grid container spacing={2}>

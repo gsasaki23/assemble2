@@ -6,12 +6,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import withStyles from '@material-ui/core/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
+import Typography from '@mui/material/Typography';
 
 const styles = (theme) => ({
     dashboardTop:{
-        margin: "10% 0% 0% 15%",
         textAlign: "center",
-        border: "2px solid black"
+        textDecoration: "underline",
     }
 });
 
@@ -35,11 +35,12 @@ const Dashboard = (props) => {
     : (<>
         <Container component="main">
             <CssBaseline />
-            <h1 className={classes.dashboardTop}>Dashboard</h1>
-            <h1 className={classes.dashboardTop}>All pending events that await user response</h1>
-            <h1 className={classes.dashboardTop}>All pending events that already has user response</h1>
-            <h1 className={classes.dashboardTop}>Calendar View</h1>
-            <h1 className={classes.dashboardTop}>Create/Manage Teams (High Level)</h1>
+            <Typography variant="h3" mt={"7%"} className={classes.dashboardTop}>Dashboard</Typography>
+
+            <h1>All pending events that await user response</h1>
+            <h1>All pending events that already has user response</h1>
+            <h1>Calendar View</h1>
+            <h1>Create/Manage Teams (High Level)</h1>
 
         </Container>
     </>

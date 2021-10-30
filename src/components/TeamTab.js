@@ -29,10 +29,9 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import Alert from '@mui/material/Alert';
 
 const styles = (theme) => ({
-    TeamTabTop:{
-        margin: "10% 0% 0% 15%",
+    teamName:{
         textAlign: "center",
-        border: "2px solid black",
+        textDecoration: "underline",
     },
     newButton: {
         position: 'fixed',
@@ -40,7 +39,8 @@ const styles = (theme) => ({
 		right: 0
     },
     eventsGrid:{
-        margin: "5% 0% 0% 15%",
+        margin: "3% 0% 0% 15%",
+        width: "80%"
     },
 	bullet: {
 		display: 'inline-block',
@@ -288,9 +288,9 @@ const TeamTab = (props) => {
         </div>
     </>)
     : (<>
-        <Container component="main">
+        <Container component="main" maxWidth="xl">
             <CssBaseline />
-            <h1 className={classes.TeamTabTop}>{teamData.teamName}</h1>
+            <Typography variant="h3" mt={"7%"} className={classes.teamName}>Team {teamData.teamName}</Typography>
 
             {/* New/Edit Event Popup */}
             <Dialog open={openNewEdit} onClose={closeNewEditHandler}>
@@ -452,9 +452,9 @@ const TeamTab = (props) => {
 
 
             {/* Pending/Completed Clusters */}
-            <Grid className={classes.eventsGrid} container spacing={2}>
+            <Grid className={classes.eventsGrid} container spacing={2} >
                 {/* Pending Cluster */}
-                <Grid item xs={12}><Typography variant="h5" component="h2">Pending</Typography></Grid>
+                <Grid item xs={12} ><Typography variant="h5" component="h2">Pending</Typography></Grid>
                 { pendingEvents.map((teamEvent,i) => 
                     (<Grid item xs={12} sm={4} key={i} >
                         <Card className={classes.eventCard} variant="outlined">
