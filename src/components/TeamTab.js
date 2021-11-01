@@ -421,7 +421,17 @@ const TeamTab = (props) => {
 
             {/* View Event Popup */}
             <Dialog open={openView} onClose={closeViewHandler}>
-
+                <DialogTitle>{eventName}</DialogTitle>
+                    <DialogContent className={classes.center} >
+                        <DialogContentText>
+                            {eventNotes}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={closeDeleteHandler}>
+                            Close
+                        </Button>
+                    </DialogActions>
             </Dialog>
             
             {/* Delete Event Popup */}
