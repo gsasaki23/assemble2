@@ -9,7 +9,7 @@ import Dashboard from '../components/Dashboard';
 import TeamTab from '../components/TeamTab';
 
 // @material-ui Imports
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from '@mui/material/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -67,16 +67,19 @@ const Home = (props) => {
     const { classes } = props;
     const [uiLoading, setUiLoading] = useState(true);
     const [userData, setUserData] = useState({});
-    // const [teamsData, setTeamsData] = useState([]);
     const [teamsData, setTeamsData] = useState([]);
     const [renderTab, setRenderTab] = useState("Dashboard");
     const [renderTeamData, setRenderTeamData] = useState({});
+    const [hideDrawer, setHideDrawer] = useState(true);
     
     const loadAccountPage = e => {
         setRenderTab("Account");
     }
     const loadDashboardPage = e => {
         setRenderTab("Dashboard");
+    }
+    const toggleDrawer = e => {
+        hideDrawer === true ? setHideDrawer(false) : setHideDrawer(true);
     }
     const selectTeamTab = e => {
         // setRenderTab(e.target.innerHTML);
@@ -146,10 +149,11 @@ const Home = (props) => {
     : (<>
         <CssBaseline />
         
+        {/* Header */}
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-                    <IconButton size="medium" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
+                    <IconButton size="medium" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }} onClick={toggleDrawer}>
                         <MenuIcon />
                     </IconButton>
 
@@ -163,8 +167,8 @@ const Home = (props) => {
             </AppBar>
         </Box>
 
-        {/* TODO: More Fancies https://mui.com/components/drawers/ */}
-        <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper }}>
+        {/* Sidebar */}
+        <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper }} hidden={hideDrawer} onClose={toggleDrawer}>
             <div className={classes.toolbar} />
             <Divider />
                 <center>
