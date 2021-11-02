@@ -28,7 +28,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import Alert from '@mui/material/Alert';
 import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 const styles = (theme) => ({
     teamName:{
@@ -54,6 +53,14 @@ const styles = (theme) => ({
         top: "50%",
         transform: "translateY(-50%)"
     },
+    uiProgess: {
+		position: 'fixed',
+		zIndex: '1000',
+		height: '31px',
+		width: '31px',
+		left: '45%',
+		top: '35%'
+	},
     center: {
         textAlign: "center"
     }
@@ -300,9 +307,7 @@ const TeamTab = (props) => {
             <Dialog open={openNewEdit} onClose={closeNewEditHandler}>
                 {submitLoading === true
                 ? (<>
-                    <div>
-                        {submitLoading && <CircularProgress size={125} className={classes.uiProgess} />}
-                    </div>
+                    {submitLoading && <CircularProgress size={125} className={classes.uiProgess} />}
                 </>)
                 : (<>
                 <DialogTitle>{buttonType === 'Edit' ? 'Edit Event' : 'Create Event'}</DialogTitle>
