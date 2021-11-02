@@ -27,6 +27,8 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import Alert from '@mui/material/Alert';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const styles = (theme) => ({
     teamName:{
@@ -43,6 +45,14 @@ const styles = (theme) => ({
 	},
     marginTop5: {
         marginTop: "5%"
+    },
+    verticalParent: {
+        position: "relative",
+    },
+    verticalChild: {
+        position: "absolute",
+        top: "50%",
+        transform: "translateY(-50%)"
     },
     center: {
         textAlign: "center"
@@ -67,6 +77,7 @@ const TeamTab = (props) => {
     const [eventStartDateTime, setEventStartDateTime] = useState(new Date());
     const [eventEndDateTime, setEventEndDateTime] = useState(new Date());
     const [eventNotes, setEventNotes] = useState("");
+    const [eventStatus, setEventStatus] = useState(false);
     const [errors, setErrors] = useState({});
     const [submitLoading, setSubmitLoading] = useState(false);
     dayjs.extend(relativeTime);
@@ -82,6 +93,7 @@ const TeamTab = (props) => {
         setEventStartDateTime(new Date());
         setEventEndDateTime(new Date());
         setEventNotes("");
+        setEventStatus(false);
         setOpenNewEdit(true);
 	};
     const createNewHandler = e => {
@@ -101,6 +113,7 @@ const TeamTab = (props) => {
                 setEventStartDateTime(new Date());
                 setEventEndDateTime(new Date());
                 setEventNotes("");
+                setEventStatus(false);
                 setOpenNewEdit(false);
                 setUpdateTeamDataTrigger(true);
                 
@@ -139,6 +152,9 @@ const TeamTab = (props) => {
         setEventStartDateTime(timestampToDate(eventToEdit.startDateTime));
         setEventEndDateTime(timestampToDate(eventToEdit.endDateTime));
         setEventNotes(eventToEdit.notes);
+        eventToEdit.status === "completed" 
+        ? setEventStatus(true)
+        : setEventStatus(false);
 
         setButtonType('Edit');
         setOpenNewEdit(true);
@@ -155,7 +171,8 @@ const TeamTab = (props) => {
         setSubmitLoading(true);
         
         // Update Call
-        updateEvent(teamData.id, {eventId, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes})
+        let eventStatusToSubmit = eventStatus === true ? "completed" : "pending";
+        updateEvent(teamData.id, {eventId, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes, eventStatusToSubmit})
             .then(() => {
                 // Alert?
                 setSubmitLoading(false);
@@ -384,6 +401,20 @@ const TeamTab = (props) => {
                                 rows={4}
                                 defaultValue={eventNotes}
                                 onChange={e => {setEventNotes(e.target.value);}}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} className={classes.verticalParent}>
+                            <DialogContentText className={classes.verticalChild}> Completion Status: {eventStatus ? 'Completed' : "Pending"} </DialogContentText>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Switch 
+                                id="eventStatus" 
+                                size="medium"
+                                checked={eventStatus}
+                                onChange={e => {
+                                    setEventStatus(e.target.checked);
+                                }}
                             />
                         </Grid>
 

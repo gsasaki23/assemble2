@@ -73,7 +73,7 @@ const updateEvent = async (teamId, updatedEventData) => {
     let events = teamDocSnapshot.data().events;
     
     // Update matching eventId
-    const {eventId, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes} = updatedEventData;
+    const {eventId, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventNotes, eventStatusToSubmit} = updatedEventData;
     for (const event of events) {
         if (event.eventId === eventId) {
             event.eventName = eventName;
@@ -81,6 +81,7 @@ const updateEvent = async (teamId, updatedEventData) => {
             event.startDateTime = eventStartDateTime;
             event.endDateTime = eventEndDateTime;
             event.notes = eventNotes;
+            event.status = eventStatusToSubmit;
             break;
         }
     }
