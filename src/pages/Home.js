@@ -29,18 +29,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import GroupIcon from '@mui/icons-material/Group';
-const drawerWidth = "15%";
 
 const styles = (theme) => ({
 	appBar: {
 		zIndex: theme.zIndex.drawer + 1
 	},
 	drawer: {
-		width: drawerWidth,
+		width: "15%",
 		flexShrink: 0
 	},
 	drawerPaper: {
-		width: drawerWidth
+		width: "15%"
 	},
 	content: {
 		flexGrow: 1,
@@ -91,6 +90,7 @@ const Home = (props) => {
                 console.log("tab data updated");
             }
         }
+        toggleDrawer();
     }
     const logoutHandler = e => {
 		localStorage.removeItem('AssembleAuthToken');

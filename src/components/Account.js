@@ -17,7 +17,6 @@ const styles = (theme) => ({
         textDecoration: "underline",
     },
     form:{
-        margin: "5% 0% 0% 15%",
         textAlign: "center"
     }
 });

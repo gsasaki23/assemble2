@@ -38,22 +38,9 @@ const styles = (theme) => ({
 		bottom: 0,
 		right: 0
     },
-    eventsGrid:{
-        margin: "3% 0% 0% 15%",
-        width: "80%"
-    },
-	bullet: {
-		display: 'inline-block',
-		margin: '0 2px',
-		transform: 'scale(0.8)'
-	},
 	pos: {
 		marginBottom: 12
 	},
-    form:{
-        margin: "5% 0% 0% 15%",
-        textAlign: "center"
-    },
     marginTop5: {
         marginTop: "5%"
     },
@@ -462,7 +449,7 @@ const TeamTab = (props) => {
 
 
             {/* Pending/Completed Clusters */}
-            <Grid className={classes.eventsGrid} container spacing={2} >
+            <Grid className={classes.marginTop5} container spacing={2} >
                 {/* Pending Cluster */}
                 <Grid item xs={12} ><Typography variant="h5" component="h2">Pending</Typography></Grid>
                 { pendingEvents.map((teamEvent,i) => 
