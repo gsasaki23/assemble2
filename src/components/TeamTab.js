@@ -449,6 +449,15 @@ const TeamTab = (props) => {
                         <DialogContentText>
                             {eventNotes}
                         </DialogContentText>
+                        <Typography variant="h5" component="h2">
+                            {teamEvent.eventName}
+                        </Typography>
+                        <Typography className={classes.pos} color="textSecondary">
+                            Created {timestampToDateDiff(teamEvent.createdAt)}
+                        </Typography>
+                        <Typography variant="body2" component="p">
+                            at {teamEvent.location}
+                        </Typography>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={closeDeleteHandler}>
