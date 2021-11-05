@@ -2,11 +2,11 @@
 ## Event organization App - Ping team members to assemble to your event!
 
 ### [Live Demo](https://assemble2-b630f.web.app/) and [GitHub Repo](https://github.com/gsasaki23/assemble2)
-### Latest Update: v1.4 (10/01/2021)
+### Latest Update: v1.6 (11/05/2021)
 
 ## Main Components
 - Front-End: ReactJS & Material UI
-- Back-End: Firebase Auth and Firestore (Web Version 9)
+- Back-End: Firebase Auth & Firestore (Web Version 9)
 
 ## Technical Notes
 - `npm start` runs the app in the development mode.\
@@ -17,6 +17,8 @@ The page will reload if you make edits and you will also see any lint errors in 
 (Currently Obsolete with the firebase hosting workflow being used.)
 
 ## Changelog
+- v1.6 (Nov 21): Drawer and appearance updates.
+- v1.5 (Oct 21): Create, read, edit, and delete events on Team Tabs.
 - v1.4 (Sep 21): Each tab renders simple Firestore data.
 - v1.3 (Sep 21): Account Settings, Dashboard, and Team Tabs UI added.
 - v1.2 (Sep 21): Signin/Signup through Email/Password or Google added.
