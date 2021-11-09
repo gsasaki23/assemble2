@@ -7,6 +7,7 @@
 ## Main Components
 - Front-End: ReactJS & Material UI
 - Back-End: Firebase Auth & Firestore (Web Version 9)
+- TBD: More CSS - Tailwind or SASS?
 
 ## Technical Notes
 - `npm start` runs the app in the development mode.\
