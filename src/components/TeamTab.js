@@ -197,9 +197,32 @@ const TeamTab = (props) => {
     /*
         Handlers for Event "VIEW" Button
     */
-    const openViewHandler = (data) => {
-        console.log("openViewHandler");
-        // set event info from args
+    const openViewHandler = e => {
+        e.preventDefault();
+
+        // Find matching event ID
+        let eventIdToShow = parseInt(e.target.id.replaceAll("-view",""));
+        let eventToView = {};
+        for (const event of teamData.events) {
+            if (event.eventId === eventIdToShow) {
+                eventToView = event;
+                break;
+            } 
+        }
+        // TODO: Error handling
+        if (eventToView === {}) return;
+
+        // Set respective field into state
+        setEventId(eventToView.eventId);
+        setEventName(eventToView.eventName);
+        setEventLocation(eventToView.location);
+        setEventStartDateTime(timestampToDate(eventToView.startDateTime));
+        setEventEndDateTime(timestampToDate(eventToView.endDateTime));
+        setEventNotes(eventToView.notes);
+        eventToView.status === "completed" 
+        ? setEventStatus(true)
+        : setEventStatus(false);
+
         setOpenView(true);
 	};
     const closeViewHandler = () => {
