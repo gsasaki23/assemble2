@@ -497,22 +497,13 @@ const TeamTab = (props) => {
                         {submitLoading && <CircularProgress size={125} className={classes.uiProgess} />}
                     </div>
                 </>)
-                : (<>
-                <DialogTitle>Delete Event</DialogTitle>
-                <DialogContent className={classes.center} >
-                    <DialogContentText>
-                        Are you sure? This can't be undone!
-                    </DialogContentText>
-                        <Button variant="contained" color="error" onClick={deleteEventHandler} >
-                            Delete "{eventName}"!
-                        </Button>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeDeleteHandler}>
-                        Cancel
-                    </Button>
-                </DialogActions>
-                </>)}
+                : (
+                    <DeletePopup 
+                        eventName={eventName} 
+                        deleteEventHandler={deleteEventHandler} 
+                        closeDeleteHandler={closeDeleteHandler}
+                    />   
+                )}
             </Dialog>
 
             {/* Pending/Completed Clusters */}
