@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 // Component Imports
+import NewEditPopup from '../components/NewEditPopup';
 import DeletePopup from '../components/DeletePopup';
 
 // @material-ui Imports
@@ -25,12 +26,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterMoment from '@mui/lab/AdapterMoment';
-import Alert from '@mui/material/Alert';
-import Switch from '@mui/material/Switch';
 
 const styles = (theme) => ({
     teamName:{
@@ -335,137 +330,19 @@ const TeamTab = (props) => {
                 ? (<>
                     {submitLoading && <CircularProgress size={125} className={classes.uiProgess} />}
                 </>)
-                : (<>
-                <DialogTitle>{buttonType === 'Edit' ? 'Edit Event' : 'Create Event'}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {buttonType === 'Edit' 
-                            ? 'Edit your event details!'
-                            : 'Assemble your team by creating a new event!'}
-                    </DialogContentText>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} className={classes.marginTop5}>
-                            <TextField 
-                                id="eventName" 
-                                name="eventName" 
-                                variant="outlined" 
-                                fullWidth 
-                                required
-                                label="Event Name" 
-                                defaultValue={eventName}
-                                onChange={e => {
-                                    if (e.target.value === ""){
-                                        setErrors({...errors, eventName: "We need to know what we're assembling for!"});
-                                    } else {
-                                        if (errors.eventName) {
-                                            let newErrors = {...errors};
-                                            delete newErrors.eventName;
-                                            setErrors(newErrors);
-                                        } 
-                                        setEventName(e.target.value);
-                                    }
-                                }}
-                                helperText={errors.eventName} 
-                                error={errors.eventName ? true : false}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField 
-                                id="eventLocation" 
-                                name="eventLocation" 
-                                variant="outlined" 
-                                fullWidth 
-                                required
-                                label="Location" 
-                                defaultValue={eventLocation}
-                                onChange={e => {
-                                    if (e.target.value === ""){
-                                        setErrors({...errors, eventLocation: "We need to know where to assemble!"});
-                                    } else {
-                                        if (errors.eventLocation) {
-                                            let newErrors = {...errors};
-                                            delete newErrors.eventLocation;
-                                            setErrors(newErrors);
-                                        } 
-                                        setEventLocation(e.target.value);
-                                    }
-                                }}
-                                helperText={errors.eventLocation} 
-                                error={errors.eventLocation ? true : false}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <LocalizationProvider dateAdapter={AdapterMoment}>
-                                <DateTimePicker
-                                    id="eventStartDateTime" 
-                                    name="eventStartDateTime" 
-                                    variant="outlined" 
-                                    fullWidth 
-                                    required
-                                    label="Starting Date & Time"
-                                    value={eventStartDateTime}
-                                    onChange={(newValue) => { setEventStartDateTime(newValue.toDate()); }}
-                                    renderInput={(props) => <TextField {...props} />}
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <LocalizationProvider dateAdapter={AdapterMoment}>
-                                <DateTimePicker
-                                    id="eventEndDateTime" 
-                                    name="eventEndDateTime" 
-                                    variant="outlined" 
-                                    fullWidth 
-                                    label="Ending Date & Time"
-                                    value={eventEndDateTime}
-                                    onChange={(newValue) => { setEventEndDateTime(newValue.toDate()); }}
-                                    renderInput={(props) => <TextField {...props} />}
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12} className={classes.marginTop5}>
-                            <TextField
-                                id="eventNotes"
-                                label="Notes (Optional)"
-                                fullWidth
-                                multiline
-                                rows={4}
-                                defaultValue={eventNotes}
-                                onChange={e => {setEventNotes(e.target.value);}}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6} className={classes.verticalParent}>
-                            <DialogContentText className={classes.verticalChild}> Completion Status: {eventStatus ? 'Completed' : "Pending"} </DialogContentText>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Switch 
-                                id="eventStatus" 
-                                size="medium"
-                                checked={eventStatus}
-                                onChange={e => {
-                                    setEventStatus(e.target.checked);
-                                }}
-                            />
-                        </Grid>
-
-                        {/* If submit errors, show this */}
-                        {errors.submit
-                        ? (<Grid item xs={12} className={classes.marginTop5}>
-                            <Alert severity="error">Something went wrong, please try again!</Alert>
-                        </Grid>)
-                        : (<></>)}
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeNewEditHandler}>
-                        Cancel
-                    </Button>
-                    <Button onClick={buttonType === 'Edit' ? editHandler : createNewHandler}  disabled={!eventName || !eventLocation || !eventStartDateTime || !eventEndDateTime }>
-                        {buttonType === 'Edit' ? 'Save' : 'Submit'}
-                    </Button>
-                </DialogActions>
-                </>)}
+                : ( <NewEditPopup 
+                        buttonType = { buttonType }
+                        errors = { errors } setErrors = { setErrors }
+                        eventName = { eventName } setEventName = { setEventName }
+                        eventLocation = { eventLocation } setEventLocation = { setEventLocation }
+                        eventStartDateTime = { eventStartDateTime } setEventStartDateTime = { setEventStartDateTime }
+                        eventEndDateTime = { eventEndDateTime } setEventEndDateTime = { setEventEndDateTime }
+                        eventNotes = { eventNotes } setEventNotes = { setEventNotes }
+                        eventStatus = { eventStatus } setEventStatus = { setEventStatus }
+                        closeNewEditHandler = { closeNewEditHandler }
+                        createNewHandler = { createNewHandler }
+                        editHandler = { editHandler }
+                /> )}
             </Dialog>
 
             {/* View Event Popup */}
