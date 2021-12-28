@@ -4,6 +4,9 @@ import { Timestamp, createEvent, updateEvent, deleteEvent, getTeamDataByID } fro
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+// Component Imports
+import DeletePopup from '../components/DeletePopup';
+
 // @material-ui Imports
 import CssBaseline from '@material-ui/core/CssBaseline';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -511,7 +514,6 @@ const TeamTab = (props) => {
                 </DialogActions>
                 </>)}
             </Dialog>
-
 
             {/* Pending/Completed Clusters */}
             <Grid className={classes.marginTop5} container spacing={2} >
