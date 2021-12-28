@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 // Component Imports
 import NewEditPopup from '../components/NewEditPopup';
+import ViewPopup from '../components/ViewPopup';
 import DeletePopup from '../components/DeletePopup';
 
 // @material-ui Imports
@@ -22,10 +23,6 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 const styles = (theme) => ({
     teamName:{
@@ -347,23 +344,15 @@ const TeamTab = (props) => {
 
             {/* View Event Popup */}
             <Dialog open={openView} onClose={closeViewHandler}>
-                <DialogTitle>{eventName}</DialogTitle>
-                    <DialogContent className={classes.center} >
-                        <DialogContentText>
-                            {eventNotes}
-                        </DialogContentText>
-                        <Typography variant="h5" component="h2">
-                            {eventName}
-                        </Typography>
-                        <Typography variant="body2" component="p">
-                            at {eventLocation}
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={closeViewHandler}>
-                            Close
-                        </Button>
-                    </DialogActions>
+                <ViewPopup 
+                    eventName = { eventName }
+                    eventLocation = { eventLocation } setEventLocation = { setEventLocation }
+                    eventStartDateTime = { eventStartDateTime } setEventStartDateTime = { setEventStartDateTime }
+                    eventEndDateTime = { eventEndDateTime } setEventEndDateTime = { setEventEndDateTime }
+                    eventNotes = { eventNotes } setEventNotes = { setEventNotes }
+                    eventStatus = { eventStatus } setEventStatus = { setEventStatus }
+                    closeViewHandler = { closeViewHandler }
+                />
             </Dialog>
             
             {/* Delete Event Popup */}
