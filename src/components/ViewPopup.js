@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const styles = (theme) => ({
@@ -45,22 +44,30 @@ const styles = (theme) => ({
 });
 
 const ViewPopup = (props) => {
-    const { classes, eventName, eventLocation, eventNotes, closeViewHandler } = props;
-    // const { eventStartDateTime, eventEndDateTime, eventStatus } = props;
+    const { classes, eventName, eventLocation, eventStartDateTime, eventEndDateTime, eventStatus, eventNotes, closeViewHandler } = props;
 
     return (<>
         <DialogTitle>{eventName}</DialogTitle>
-        <DialogContent className={classes.center} >
-            <DialogContentText>
-                {eventNotes}
-            </DialogContentText>
-            <Typography variant="h5" component="h2">
-                {eventName}
-            </Typography>
+
+        <DialogContent>
             <Typography variant="body2" component="p">
-                at {eventLocation}
+                Location:  {eventLocation}
             </Typography>
+
+            {/* <Typography variant="body2" component="p">
+                From: {eventStartDateTime} To: {eventEndDateTime}
+            </Typography> */}
+            
+            <Typography variant="body2" component="p">
+                Notes: {eventNotes}
+            </Typography>
+            
+            <Typography variant="body2" component="p">
+                Status: {eventStatus}
+            </Typography>
+
         </DialogContent>
+
         <DialogActions>
             <Button onClick={closeViewHandler}>
                 Close
