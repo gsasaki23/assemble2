@@ -18,6 +18,7 @@ The page will reload if you make edits and you will also see any lint errors in 
 (Currently Obsolete with the firebase hosting workflow being used.)
 
 ## Changelog
+- v1.7 (Jan 21): Refactoring TeamTab
 - v1.6 (Nov 21): Drawer and appearance updates.
 - v1.5 (Oct 21): Create, read, edit, and delete events on Team Tabs.
 - v1.4 (Sep 21): Each tab renders simple Firestore data.
